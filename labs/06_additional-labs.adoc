@@ -1,0 +1,32 @@
+= Additional Labs
+
+== Labs you can choose from
+
+* link:../additional-labs/oauth2-security.adoc[OAuth 2.0 security]
+* link:../additional-labs/pitc-sso.adoc[Puzzle ITC SSO]
+* link:../additional-labs/ruby-adapter.adoc[Ruby on Rails adapter]
+* link:../additional-labs/idp-github.adoc[Integrating GitHub as external Identitiy Provider]
+* link:../additional-labs/quarkus.adoc[Protect Quarkus based application with Keycloak]
+* link:../additional-labs/capture-access-token.adoc[Capture Access Token during Authorization Code Flow]
+* link:../additional-labs/session-handling.adoc[HTTP Session Handling between User Agents and Keycloak]
+* link:../additional-labs/user-federation-provider.adoc[LDAP for User Federation Providering]
+
+
+== More labs to come
+
+* PKCE
+* Advanced token handling
+* Client Scopes
+* Working with Ressources and Scopes
+* Dynamic Securing Applications
+* UMA - User Managed Access
+* Keycloak Cluster Setup
+* Keycloak Development
+* Keycloak Look & Feel
+* Keycloak 2FA / webauthn
+* SAML
+
+
+'''
+[.text-right]
+link:../README.adoc[<- Techlab overview]

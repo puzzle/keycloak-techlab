@@ -1,0 +1,47 @@
+= Capture and inspect the Access Token in Authorization Code Flow - Solutions
+
+.Captured Request between NodeJS App (Client) -> Authorization Server:
+[source,http]
+----
+POST /auth/realms/techlab/protocol/openid-connect/token HTTP/1.1
+    Content-Type: application/x-www-form-urlencoded
+    X-Client: keycloak-nodejs-connect
+    Content-Length: 333
+    Host: keycloak:8180
+    Connection: close
+body:
+    client_session_state=T7hMnGEGlyCOhhj0Vy3sZKHCIIIhKKyY&
+    client_session_host=&
+    code=57117902-c129-492a-80d4-ed1a1f59def0.2b8df9c4-a1af-4a45-946b-a8ed2452cf5e.4bcea68e-e9cb-41c2-8b8e-c0e09df1985b&
+    grant_type=authorization_code&
+    client_id=techlab-cli&
+    redirect_uri=http%3A%2F%2Flocalhost%3A3001%2Ftechlab-service%2Fsecured%3Fauth_callback%3D1
+----
+
+[source,http]
+----
+.HTTP Response `Authorization Server -> Client`
+    HTTP/1.1 200 OK
+    Connection: close
+    Cache-Control: no-store
+    Pragma: no-cache
+    Content-Type: application/json
+    Content-Length: 3290
+    Date: Tue, 17 Sep 2019 16:41:55 GMT
+        {
+            "access_token":"...",
+            "refresh_token":"...",
+            "id_token":"...",
+            "expires_in":300,
+            "refresh_expires_in":1800,
+            "token_type":"bearer",
+            "not-before-policy":1568116931,
+            "session_state":"2b8df9c4-a1af-4a45-946b-a8ed2452cf5e",
+            "scope":"openid profile email"
+        }
+----
+
+
+'''
+[.text-right]
+link:../README.adoc[<- Techlab overview]

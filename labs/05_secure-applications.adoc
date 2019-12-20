@@ -1,0 +1,51 @@
+= Secure Applications
+
+In this chapter we finally use our basic knowledge of the previous chapters and make some practical experience with applications of different technologies.
+
+This lab is based on official examples of the Keycloak community. There are different sources for examples and information about securing applications with Keycloak:
+
+* On of the best sources is the (really good) documentation of Keycloak. It contains a chapter specially about link:https://www.keycloak.org/docs/latest/securing_apps/index.html[adapters and securing applications] with Keycloak. All currently with adapters supported platforms are listed link:https://www.keycloak.org/docs/latest/securing_apps/index.html#supported-platforms[here].
+
+* The Keycloak source (and delivery) contains link: https://github.com/keycloak/keycloak/tree/master/examples[a folder] containing examples focused to configure and extend a Keycloak setup.
+
+* There is link:https://github.com/keycloak/keycloak-demo[demonstration setup] for securing applications with Keycloak based on minishift available. But actually this seems to be a bit outdated.
+
+* There are different link:https://github.com/keycloak/keycloak-quickstarts[quickstarts] for Java, Javascript, Angular etc. These are well maintained and up to the latest Keycloak version.
+
+The following lab are *built* on these *up-to-date* quickstarts of Keycloak. The labs show some *variations* and enhance some of the examples.
+Since Keycloak itself is based on JEE and the Wildfly server, almost all examples are also based on Wildfly. But don't worry, we have prepared a Wildfly setup for you ;)
+
+Start with getting the quickstart examples:
+
+[source,sh]
+----
+git clone https://github.com/keycloak/keycloak-quickstarts.git
+----
+
+[NOTE]
+====
+Each example has it's own maven project and readme file. Feel free to get some insights. In the following labs we will adjust the examples to our custom environment and thus won't follow the readme exactly.
+====
+
+[NOTE]
+====
+Some of the quickstarts for Keycloak use advanced features that we haven't introduced so far. You can check the _additional labs_ section of this techlab for labs covering advanced features of Keycloak.
+====
+
+== Wildfly setup
+The docker compose file prepared for this techlab includes already a dedicated Wildfly instance for easily deploying Keycloak quickstarts. Wildfly service is running at http://localhost:8888 and the management console is available at the default port `9990`. There's already a management user defined with the credentials `admin:secret`.
+
+== What we are going to deploy and secure
+
+Know we will create our own application landscape that uses Keycloak to secure the several parts. Our landscape will consist of:
+
+* a link:./05a_spring-boot-rest-api.adoc[Spring Boot based restful API] to show some specialities of Spring Framework
+* a link:./05b_jee-rest-api.adoc[JEE based restful API] secured with Wildfly Keycloak Adapter
+* a link:./05c_javascript-app.adoc[browser application] implemented using html5 and based on keycloak.js
+* a simulated link:./05d_gatekeeper.adoc[standard application] using Gatekeeper to authenticate and authorize access
+
+
+'''
+[.text-right]
+link:../README.adoc[<- Techlab overview] | 
+link:./05a_spring-boot-rest-api.adoc[Secure Spring Boot restful API ->]

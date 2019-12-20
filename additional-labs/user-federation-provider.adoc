@@ -1,0 +1,196 @@
+= User Federation Provider
+
+In this lab we are going to integrate OpenLDAP as User Federation Provider. So we will synchronize Users and Groups of a Directory with Keycloak.
+
+[HINT]
+====
+Keycloak differs between _Identity Providers (IdP)_ and _User Federation Providers (UFP)_. While IdPs have the target to enable _single Sign-on (SSO)_ using protocol like OIDC and SAML, UFP have the target to enable linking a users identity and attributes stored across multiple distinct identity management systems using LDAP and Kerberos. See lab link:../labs/00_introduction.adoc[Introduction] for more information about SSO and Federation.
+====
+
+Keycloak has Documented this feature link:https://www.keycloak.org/docs/latest/server_admin/index.html#_user-storage-federation[here]. This is just a short 
+
+[quote, https://www.keycloak.org/docs/latest/server_admin/index.html#_user-storage-federation]
+____
+External user databases rarely have every piece of data needed to support all the features that Keycloak has. In this case, the User Storage Provider can opt to store some things locally in the Keycloak user store. Some providers even import the user locally and sync periodically with the external store. All this depends on the capabilities of the provider and how its configured. For example, your external user store may not support OTP. Depending on the provider, this OTP can be handled and stored by Keycloak.
+____
+
+We are going to integrate Keycloak with openLDAP. There's is already a openLDAP instance running at `localhost:389` (`openldap:389` within docker-compose network). This instance is based on https://github.com/rroemhild/docker-test-openldap and provides us a Domain for `planetexpress.com` (from link:https://en.wikipedia.org/wiki/Futurama[Futurama]) with some users and groups.
+
+[TIP]
+====
+If you want to take a look using you local LDAP Browser here are the connections details:
+
+* URL: `ldap://localhost:389`
+* Bind-User: `cn=admin,dc=planetexpress,dc=com`
+* Bind-Password: `GoodNewsEveryone`
+* Encryption method: `none`
+* Authentication method: `simple`
+====
+
+Now let's start with creating our _User Federation Provider_. In your _Administration Console_:
+
+    User Federation -> Add Provider... (top right) -> LDAP:
+
+    * `Console Display Name`: planetexpress.com
+    * `Edit Mode`: `READ_ONLY`
+    * `Vendor`: `Other`
+    * `Username LDAP attribute / RDN LDAP attribute`: uid
+    * `UUID LDAP attribute`: entryUUID
+    * `Connection URL`: ldap://openldap:389
+
+Click on the Button _Test connection_, the test should be successfully.
+
+    * `Bind Type`: Simple
+    * `Bind DN`: cn=admin,dc=planetexpress,dc=com
+    * `Bind Credential`: GoodNewsEveryone
+
+Click on the Button _Test authentication, the test should be successfully.
+
+[NOTE]
+====
+For our openLDAP instance we could also use `Bind Type: None` for only read access. Because we are going to write to the directory later in this lab we use a bind unser with write access.
+====
+
+Go further with the following settings:
+
+    * `Enable StartTLS`: Off
+    * `User DN`: ou=people,dc=planetexpress,dc=com
+    * `Custom User LDAP Filter` (!(cn=Amy Wong))
+
+[CAUTION]
+====
+The user `Amy` has a multivalued RD. Keycloak seems to not properly support mulitvalued RDN. It works as long you don't want to write changes for such users back to the directory. Internally Keycloak creates for incomplete `DNs` for this users and that is why this users can't be found on update-actions during synchronization. To keep it simple we remove user `Amy` using a LDAP filter. 
+// TODO open issue
+====
+
+We keep the settings for Synchronizing as default - which means no periodic and only manually synchronizations.
+
+Click on the Button _Synchronize all users_. You should get a notification that 6 users successfully got synchronized. Check this in your User overview.
+
+Click one of these new users to open the detail page. You can see a `Federation Link` property linking to our before created Federation Provider. Additional LDAP attributes are created and can be viewed under the tav `Attributes` of each linked user.
+
+Now open the link:http://localhost:8180/auth/realms/techlab/account[_Account Console_] in a *private window* and try to login with user `Fry` (`username=fry`/`password=fry`).
+
+In the _Account Console_ try to change the users `email` to `fry.2@planetexpress.com`. Hoppla, you can't update this account as it is read-only. Because we configured our _User Federation Provider_ as read-ony we are not able to change any user attributes that are synchronized by LDAP.
+
+We change that. Go back to our _User Federation Provider_ for `planetexpress.com` and edit the setting `Edit Mode` to `WRITEABLE`. 
+
+Again open a *private window* with link:http://localhost:8180/auth/realms/techlab/account[_Account Console_] for User `Leela`. Go to the tab `Credentials` and try to change the users `Password` to `password`. Now you should be able to change any user attribute.
+
+Congratulations, you did a basic _User Federation Provider_ integration using LDAP. Now we are going to look at some potential cases for _Mappers_:
+
+
+## Case 1: We want to be able to grant access specially for users from `planetexpress.com`:
+
+Imagine a application that want's to be able to grant access to some features only for users that belongs to the domain `planetexpress.com`. You can achieve this using different methods, but if you use Keycloak and OAuth 2.0/OIDC the proper way is to use _roles_.
+
+First, create a role named `org-planetexpress.com`:
+
+    Roles -> Realm Roles -> Add role (top right)
+
+Now open the configuration for our _User Federation Provider_ and create a new mapper:
+
+    User Federation -> `planetexpress.com` -> Mappers -> Create
+
+    * `Name`: add-planetexpress-role
+    * `Type`: `hardcoded-ldap-role-mapper`
+    * `Role`: org-planetexpress.com
+
+Save and go back to the _User Federation Provider_. Click _Synchronize all users_. All users of planetexpress should have our role now which is now added to any default access token issued by our Keycloak realm.
+
+TODO: Why are they only visible over the users details but not over role details page?
+
+
+## Case 2: We need unique unsernames
+
+Imagine we would have multiple _User Federation Providers_. We need to make sure, the username is unique.                
+
+Edit the `Username LDAP attribute` mapper for our _User Federation Providers_ `planetexpress.com`:
+
+    User Federation -> `planetexpress.com` -> Change `Username LDAP attribute` from `uid` to `mail`.
+
+Save and go back to the _User Federation Providers_. Click _Synchronize all users_.
+
+No users got imported (all are failing). This is because we need additionally to adjust the username mapper to use `mail` instead `uid`:
+
+    Mappers -> `username` -> Change `LDAP attribute` to `mail`.
+
+// TODO: but why?
+
+[HNT]
+====
+Make sure `mail` is a mandatory LDAP attribute if you use it as username.
+====
+
+Save and go back to the _User Federation Providers_. Click _Synchronize all users_ again. The synchronization was successfully but none of the existing users got changed.
+
+That's because the `username` will only be editet at creation of a user. Click _Remove imported_ and _Synchronize all users_. All user will be recreated with the correct username. 
+
+
+## Case 3: We want to import LDAP groups
+
+In this case we want to import LDAP groups as Keycloak groups.
+
+Create a new Mapper of type `group-ldap-mapper`: 
+
+    User Federation -> `planetexpress.com` -> Mappers -> Create
+
+    * `Name`: groups
+    * `LDAP Groups DN`: ou=people,dc=planetexpress,dc=com
+    * `Group Object Classes`: group
+    * `Preserve Group Inheritance`: `off`
+    * `Mode`: `READ_ONLY`
+
+Use the tooltip to read about the available `Modes`.
+
+[TIP]
+====
+The type of modes are badly documented in the official web documentation. So use the tooltip in the _Administation Console_.
+====
+
+Click _Save_ and _Sync LDAP Groups to Keycloak_. The two groups `admin_stuff` and `ship_crew` as also its members should now be available in Keycloak. Verify it.
+
+[TIP]
+====
+Groups in Keycloak are used to group Users only. Normally, authorizing access is done using roles only. So you always have to map your groups to roles. If you would like to import your groups directly as roles you can just replace the `group-ldap-mapper` with the `role-ldap-mapper`. 
+====
+
+
+## Case 4: We wan't to synchronize additional user attributes
+
+Image that there is kind of web interface which users can use to manage additional informations such like address, phone, ssh-public-keys, etc. Keycloak can acts as master database for all of this informations but we want some special attributes to be synchronized to the directory.
+
+Create a new Mapper of type `user-attribute-ldap-mapper`:
+
+    User Federation -> `planetexpress.com` -> Mappers -> Create
+
+    * `Name`: phone
+    * `User Model Attribute`: phone
+    * `LDAP Attribute`: telephoneNumber
+
+[CAUTION]
+====
+Your directory has to support the LDAP attribute (a valid structure is needed). `telephoneNumber` is a valid attribut of `inetOrgPerson`.
+====
+
+Now add the attribute `phone` with value `+41 12 345 67 89` to a existing user of `planetexpress.com`:
+
+    Users -> `Hermes@planetexpress.com` -> Attributes
+
+Your value will be stored in LDAP. You can verify that by removing all synced users by clicking _Remove imported_ and resynchronize changed users again by clicking _Synchronize changed users_.
+
+[CAUTION]
+====
+If you delete this kind of users in your local Keycloak database the deletion will be synchronized too!
+====
+
+[TIP]
+====
+If you want to delete a single federated User you can use this workaround: Delete the Users attributes for `LDAP_ENTRY_DN` and `LDAP_ID` and click `save`. The user will de deleted in the local database immediately. Because Keycloak can no longer link the user, the deletion won't be synced. You should always recheck the behavior of newer Keycloak version before using this workaround in a production environment!
+====
+
+## Some additional tipps and tricks:
+
+* As we have seen, not all mappers for _User Federation-_ and _Identity-Providers_ will map values during synchronize. Some just map values on user creation or first login. You may have to check this looking at the source code at github.
+* If you use _User Federation-_ and _Identity-Providers_ in the same realm (with using writeable access to federation provider) you have to deal with new users created by the _Identity Provider_. That's when you may need the `Sync Registrations` switch of your _User Federation Provider_ configuration. Alternatively it's always a good pattern to separate identity providering from access management. You can achieve such kind of separation by using a separate realm for user federation which acts as identity provider for second access management realm. 
+

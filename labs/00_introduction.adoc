@@ -1,0 +1,122 @@
+= Introduction
+
+== Identity and Access Management
+
+Identity and Access Management (IAM) provides companies with centralized management of *identities* and *access rights* to different systems and applications. *Authentication* and *authorization* of the users are central functions of the IAM.
+
+== Identification
+
+Identification is the starting point for all access control as without proper identification it will not be possible to grant resources to any identity. The main objective of identification is to bind a user to appropriate controls based on the identity. Identification is the ability to identify uniquely a user of a system or an application.
+
+For example, consider a user who logs in to a system by using a user ID and password. The system uses the user ID to identify the user.
+
+== Authentication
+
+Authentication is the process of verifying the identity of a user or an application. During Authentication process, the user provides some way of proving their identity to assert that the user is who they are claiming to be. The information provided by the user to authenticate is a secret known to the user only -- a credential. Once authenticated, a trust is established between user and system.
+
+For example, consider a user who logs in to a system by using a user ID and password. The system authenticates the user at the time of logon by checking that the supplied password is correct.
+
+== Credential
+
+A credential is provided to the authentication process by a user or an application to prove their identity. A credential consits of one or more factors:
+
+* *Something you know*: A secret or a PIN
+* *Something you have*: Smart card or token
+* *Something you are*: Facial Recognition, Biometrics
+
+Multi-factor authentication covers combination or all from above three mentioned.
+
+For example, nowadays banking systems use 2-factor authentication for transactions in the form of username-password (something the user knows) and grid information printed on the debit card back side (something the user has).
+
+== Authorization
+
+Authorization is the final step in the process, and it allocates appropriate controls, privileges based on the identity in the system. So, authorization is the process of defining what resources a user needs and type of access to those resources. This is based on more or less complex rules and role concepts which are usually stored in a database.
+
+[NOTE]
+====
+Im deutschen Sprachraum wird zusätzlich zwischen *Authentisierung* und *Authentifizierung* unterschieden:
+
+Die *Authentisierung* stellt den Nachweis einer Person dar, dass sie tatsächlich diejenige Person ist, die sie vorgibt zu sein. Eine Person legt also Nachweise vor, die ihre Identität bestätigen sollen.
+Kurz gesagt: Die Authentisierung stellt einen ersten Schritt zur Prüfung der Identität dar, indem eine Person aktiv eine bestimmte Identität behauptet.
+
+Die *Authentifizierung* stellt dann die Prüfung der behaupteten Authentisierung dar. Bei der Authentifizierung ist nun der Prüfer an der Reihe. Er überprüft die Angaben auf ihre Echtheit. Zeitlich betrachtet findet eine Authentifizierung also nach einer Authentisierung statt.
+====
+
+
+== Access Control types and acronyms
+
+There are a lot of acronyms for access control. Let's take a look at some of the most important ones.
+
+=== ACL
+
+This is your basic gatekeeper — ACL has a list of users and a simple yes/no.
+
+For example, a doorman at an exclusive club: "Nope, your name isn't on the list, you can't come in..." But once you're in, you're in and can do anything.
+
+=== RBAC
+
+Obviously, we need more granular control than ACL, so we started implementing Role-Based Access Control. Person X has certain role granted to them like "User" and/or "Admin" — these roles are then used to inform the systems of what that person is allowed to do.
+
+For example, now the doorman lets you in, but you have to have the pink wristband to get into the bar and a yellow wristband to get into the card game in the back.
+
+=== ABAC/PBAC/CBAC
+
+As the word "attribute" implies, ABAC has an extra wrinkle of additional, contextual rules.
+
+For example, you and I might both have a pink wristband, but you're not 21. So I can get into the bar because of some specific attribute about me, and you're prohibited because of some specific attribute about you.
+
+Alternatively, we use the term PBAC, or Policy-Based Access Control. The only real difference between ABAC and PBAC is that ABAC has some XML standards to inform the policies. Now think of it this way: you have the pink wristband and you're of age, but you only have a state ID and we really only know how to read passports. The rules of enforcement are the same, but ABAC is a bit more technically restrictive.
+
+And then, there's CBAC, which is just Microsoft's standard, the idea is still Attributes informing the Access.
+
+=== RAdAC
+
+Now, we come to the most complex, but the most powerful collection of "things we know." RAdAC looks at who you are, what you're allowed to do, if you have the other requirements to allow you to do it, and, most importantly, if there are any other things going on in the world that might prevent you from doing it.
+
+For example, we are trying to keep our nightclub healthy. We get a list of countries that have outbreaks of Spanish flu (stick with me here...). A person who visited one of those countries might have been exposed to the flu, and is, therefore, has a higher risk of making our other customers sick.
+
+[TIP]
+====
+* *ACL* -- Your name is on the list
+* *RBAC* -- You have a pink wristband
+* *ABAC* -- You're the right age
+* *RAdAC* -- You haven't been to a country with Spanish Flu
+====
+
+== Self-service und integration
+
+Today developers and users have the need for speed. Waiting times - in particular of unknown or very long duration - are not tolerated. The solution is often self-service portals or services. In the area of ​​IAM, these can be the following:
+
+* Service for changing the password or other credentials stored in the IAM
+* Service for managing Applications and Application Roles stored in the IAM
+* Service to manage access rights to own data in the IAM
+* Federated Identity and Single Sign-On
+* ABAC
+
+=== Federated identity
+
+A federated identity in information technology is the means of linking a person's electronic identity and attributes, stored across multiple distinct identity management systems.
+
+Federated identity is related to single sign-on (SSO), in which a user's single authentication ticket, or token, is trusted across multiple IT systems or even organizations. SSO is a subset of federated identity management, as it relates only to authentication and is understood on the level of technical interoperability and it would not be possible without some sort of federation.
+
+=== Single sign-on
+
+Single sign-on (SSO) is a property of access control of multiple related, yet independent, software systems. With this property, a user logs in with a single ID and password to gain access to any of several related systems.
+
+For clarity, a distinction should be made between Directory Server Authentication and single sign-on: Directory Server Authentication refers to systems requiring authentication for each application but using the same credentials from a directory server, whereas single sign-on refers to systems where a single authentication provides access to multiple applications by passing the authentication token seamlessly to configured applications.
+
+== Sources
+
+* https://resources.infosecinstitute.com/category/certifications-training/cissp/domains/identity-and-access-management/identification-and-authentication/
+* https://www.ibm.com/support/knowledgecenter/en/SSFKSJ_7.5.0/com.ibm.mq.sec.doc/q009740_.htm
+* https://www.datenschutzbeauftragter-info.de/authentisierung-authentifizierung-und-autorisierung/
+* https://dzone.com/articles/acl-rbac-abac-pbac-radac-and-a-dash-of-cbac
+* https://laptrinhx.com/access-control-acronyms-acl-rbac-abac-pbac-radac-and-a-dash-of-cbac-1117754309/
+* https://en.wikipedia.org/wiki/Federated_identity
+* https://en.wikipedia.org/wiki/Single_sign-on
+
+
+'''
+[.text-right]
+link:../README.adoc[<- Techlab overview] | 
+link:./01_keycloak.adoc[Keycloak ->]

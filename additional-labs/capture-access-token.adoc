@@ -1,0 +1,116 @@
+= Capture and inspect the Access Token in Authorization Code Flow
+
+The goal is to capture the Access Token which is exchanged between the Client and the Authorization Server. The difficulty is in fact that using the Authorization Code Flow the access token never reaches the user agent and thus the end user does not see the token.
+
+To understand what's happening under the hood you have to capture the network traffic during the between the Client (NodeJS example App), the Authorization Server (Dockerized Keycloak) and the (Browser).
+
+[CAUTION]
+====
+This lab is based on the the lab link:../labs/02a_oauth2-authorization-code-flow.adoc[OAuth 2.0 Authorization Code Flow Lab]. Please make sure this lab is still working properly.
+====
+
+Open your browser with developer tools and login again the NodeJS based application under http://localhost:3001/techlab-service/secured. You should see the following sequence of Request & Responses except Request number 5:
+
+. End-User requests the Protected Resource, receives a HTTP 302 Redirection to Login Form provided by Keycloak
++
+[source,http]
+----
+HTTP GET http://localhost:3001/techlab-service/secured
+----
+
+. Client GETs the URL it has been redirected to
++
+[source,http]
+----
+HTTP GET http://keycloak:8180/auth/realms/techlab/protocol/openid-connect/auth?
+    client_id=techlab-cli&
+    state=9804b94f-2592-40ca-9ee0-e099410613ed&
+    redirect_uri=http%3A%2F%2Flocalhost%3A3001%2Ftechlab-service%2Fsecured%3Fauth_callback%3D1&
+    scope=openid&
+    response_type=code
+----
+
+. Resource Owner (End-User) provides Username/Password and POST the data to Authentication Endpoint
++
+[source,http]
+----
+HTTP POST http://keycloak:8180/auth/realms/techlab/login-actions/authenticate?
+    session_code=iupzBXwSLTTMEuL0pfmZc043vC1V8H52kGT4zEVvjXM&
+    execution=a52aaddb-5e13-41a3-bc2f-498527a4a83b&
+    client_id=techlab-cli&
+    tab_id=BWKi3QocE3Y
+body:
+    username:nerd
+    password:quirky
+----
++
+[NOTE]
+====
+* In the body of the HTTP POST Request the `username` and `password` will be provided to Authorization Endpoint of Keycloak
+* After successful authentication Keycloak creates the Redirect URL based on the configuration of the Client and sends
+  HTTP 302 Redirect to the Client/Browser
+* The generated Authorization Code will be transmitted to browser as `code` attribute in the callback URI
+====
+
+. The Client GETs the Protected Resource and provides the Authorization Code as Query Parameter
++
+[source,http]
+----
+HTTP GET http://localhost:3001/techlab-service/secured?auth_callback=1&
+    state=9804b94f-2592-40ca-9ee0-e099410613ed&
+    session_state=87e253d8-b242-4294-a5f6-87eeb4578ff9&
+    code=7b4f1ad9-7c05-4dc8-a0ea-c417d691a98087e253d8-b242-4294-a5f6-87eeb4578ff94bcea68e-e9cb-41c2-8b8e-c0e09df1985b
+----
++
+[NOTE]
+====
+* The Authorization Code will be transmitted to client as `code` attribute in URL
+====
+
+. Runs behind the scenes hidden from the End-User between NodeJS App (Client) and Authorization Server
+
+*Try to capture this request missing here where the Authorization Code will be exchanged against the Acces Token.*
+
+Finally the client can access the protected resources as long as the http session to Keycloak is alive and the access token and/or refresh token are not expired.
+
+    HTTP GET http://localhost:3001/techlab-service/secured
+
+[TIP]
+====
+To logout the User from the Application you can use http://localhost:3001/logout.
+====
+
+
+=== Howto Capture the Access Token Request behind the Scenes
+The access token will never be sent to the browser. Thats why you can't see it with the browser's developer tools. Instead you can use your network traffic logger of choice (e.g. Wireshark, tcpdump for powerusers ;) ) and capture the HTTP Traffic.
+
+Since we are using Docker Compose a new bridge Network will be created. You can find the name of the virtual network interface to capture the traffic from with the following command line:
+
+[source,sh]
+----
+echo "br-`docker network ls -f 'name=techlab-setup_default' -q`"
+----
+
+Invalidate the Session http://localhost:3001/logout and login again to http://localhost:3001/techlab-service/secured while capturing the network traffic. Find the access token in the captured requests.
+
+The generated Access token consists of three parts delimited by a `.` in the form `<header>.<payload>.<signature>`. 
+
+The Access Token contains interesting information (named Claims) which can be read out with a base64 decoder. You can use an online decoder for JSON Web Tokens to decode the payload, for example https://jwt.io.
+
+You can inspect the payload of the token with the following bash command:
+
+[source,sh]
+----
+echo "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJqTUdDRFA5VUhaZEJEajhiZi1mR3BEXzBJZ0pqeXhfRjU0eU5BalpIVlEwIn0.eyJqdGkiOiJjM2RjMzkxNy0zZmIzLTQxY2MtOWJhMy1jNWI2ZGMxMTZhOGEiLCJleHAiOjE1Njg2MzAxMzgsIm5iZiI6MCwiaWF0IjoxNTY4NjI5ODM4LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvYXV0aC9yZWFsbXMvdGVjaGxhYiIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiJkOGNjNDhmOC00NzkyLTRiOTQtYTQ4ZS0zMjVkMmU5YWFkZDAiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJ0ZWNobGFiLWNsaSIsImF1dGhfdGltZSI6MTU2ODYyOTgzOCwic2Vzc2lvbl9zdGF0ZSI6ImMxMTYwMWM1LWNjYzMtNGQ2ZC1iOWE1LWJhYWY3YWE3OGIwOSIsImFjciI6IjEiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsidGVjaGxhYi11c2VyIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsInByZWZlcnJlZF91c2VybmFtZSI6Im5lcmQifQ.ieVHrQrjvcfqfGUOSb6Yz2hTzKMsMkxKvlT5bjkzB1IsX51F46lPpJpltGwUth_kAGn0bSeepo9QVKuy73GEDp9oy_waPhKuwNc2GSpBUN84uhvMX7JgNDq4YkG2she522YvvRBJsOL54IYFjiqiDSW20fATjvTJ1yZfvKhIhE4rEk3qC8k87FdDpcWriz16q8OCf94iAHpRCplYDYWMT2awZ6nhJMXsISYgRtTtpK3dKgCDpacpL5roDEzd0rwpf1kcl10oYd9bMrIVA0VbJ9pc1fhAF7tmHagoxnRHyqIlpmrxsBLm4Z0kPZAEIUHIviLg5BJOswTZjQh-UEm8Og" | cut -d "." -f 2 | base64 -d | jq
+----
+
+By extracting the first part of the String you will see the Header of the token `cut -d "." -f 1`
+
+
+== Lab Solutions
+Solutions of this Lab can be found link:./capture-access-token-solutions.adoc[here].
+
+
+'''
+[.text-right]
+link:../README.adoc[<- Techlab overview]

@@ -1,0 +1,82 @@
+= Glossary
+
+
+// TODO: Translate to english
+
+
+.Glossary
+[cols="3,5a"options="header"]
+|===
+|Begriff
+|Erklärung
+
+| Client
+| Client Applikation/Service welcher der Zugriff vom Ressource Owner gewährt wird, und vom Authorization Server ein Access Token dafür ausgestellt wird. Kann bspw. eine Webapplikation, Mobile-Client, Service etc. sein.
+
+| Resource Owner
+| End-User, gewährt einem Client (Applikation) Zugriff auf eine geschützte Ressource 
+
+| Resource Server
+| HTTP Server welcher die geschützen Ressourcen anbietet.
+
+| Authorization Server
+| Stellt Access Tokens für Clients auf Basis von Authorization Grant Requests aus.
+
+| Authorization Grant
+| Ein Grant ist ein Credential und wird vom Resource Owner ausgestellt und dem Client übermittelt. Ein Authorization Grant enthält die Autorisierung eines Clients. Auf Basis von Grants werden durch den Authorization Server Access Tokens ausgestellt.
+
+| Authorization Grant Types
+| In der OAuth 2.0 Spec sind vier Grant Types enthalten: authorization code, implicit, resource owner password credentials, and client credentials
+
+| Access Token
+| String mit definiertem Scope und begrenzter Lebensdauer und zusätzlichen Attributen mit welchem sich der Client autorisiert. Werden vom Autorization Server ausgestellt und dem Client übermittelt. Der Client authentisiert sich mittels dem Access Token am Resource Server. 
+
+| Refresh Token
+| Wenn ein Access Token nicht mehr gültig ist, kann der Client mit einem Refresh Token beim Authorization Server ein neues Access Token ausstellen lassen. Refresh Tokens sind optional, und werden vom Authorization Server während der Generierung eines neuen Access Tokens ausgestellt. 
+
+| Policy
+| Eine Policy definiert Bedingungen welche erfüllt sein müssen, damit ein User Zugriff auf eine geschützte Ressource erhält.
+
+| PAP
+| Policy Administration Point. Hier werden die Policies administriert.
+
+| PIP
+| Policy Information Point. 
+
+| PEP
+| Policy Enforcement Point. Zuständig für das Enforcement (Umsetzung) von definierten Policies.
+
+| PDP
+| Policy Decision Point. Prüft ob eine Policy gültig ist.
+
+| IDP
+| Identity Provider. Dient zur Verwaltung von Entitäten und Credentials. Bietet typischerweise User Authentifizierungs-Services an.
+
+| OIDC
+| OpenID Connect
+
+| SAML 2.0
+| Security Assertion Markup Language
+
+| UMA
+| User Management Access
+
+| PKCE
+| Proof Key for Code Exchange
+
+| Scope
+| Ein Access Token kann Scopes definieren. Diese definieren die Permissions welche dem Client gewährt wurden.
+
+| Relying Party (RP)
+| Ein OAuth 2.0 Client welcher OpenID Connect verwendet.
+
+| Claim
+| Information die einer Entity attached ist wie bspw. zu einem Client im OpenID Connect Kontext.
+
+|===
+
+
+
+'''
+[.text-right]
+link:../README.adoc[<- Techlab overview]

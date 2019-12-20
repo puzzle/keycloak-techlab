@@ -1,0 +1,61 @@
+= Integrating Github as external Identitiy Provider
+In this Techlab you will integrate GitHub as an external Identity Provider in your Keycloak (Identity Federation) and secure an existing appliaction with it.
+
+[CAUTION]
+====
+* To complete this Lab you will need a GitHub account.
+* This lab is based on the the previous labs link:../labs/05b_jee-rest-api.adoc[Secure a JEE (Wildfly) based restful API] and link:../labs/05c_javascript-app.adoc[Secure a browser application (keycloak.js)]. Please make sure those labs are still working properly.
+====
+
+
+== Create a new OAuth App in GitHub
+
+. Login to Github and go to Profile -> Settings -> Developer Settings -> OAuth Apps
+. Create a `New OAuth App`
+. Using the following properties
+  - Application name: Github IdP Test
+  - Homepage URL: http://localhost:8888/app-html5/
+  - Authorization callback URL: http://keycloak:8180/auth/realms/techlab/broker/github/endpoint. (You will find the generated Redirect URI under the IdP Settings after the IdP has been created)
+
+
+== Create a new Identity Provider in Keycloak
+
+Create a new Identity Provider in Keycloak under the Realm `techlab`
+. Select `Identity Providers -> Add provider -> GitHub`
+. Copy the Client ID and Client Secret from the registered OAuth App on GitHub and `Save`
+
+Every User which authenticates with an GitHub account should be allowed to access the protected resources under http://localhost:8888/service/secure but not the Admin area under localhost:8888/service/admin. We can achieve that by assigning static Roles to the users that login with GitHub as Identity Provider. This is done in Keycloak by defining a Mapper on the Identity Provider definitions:
+
+. Select the created GitHub IdP and goto `Mappers`
+. Create a new Mapper `User Role Mapping`
+. Use `Hardcoded Role` as Mapper Type
+. Choose Client Role `user` of Client `lab-jee-rest-api` and `Save`
+
+
+== Test the Authentication against GitHub IdP
+
+Ensure your Applications from the previous Labs are running and the Frontend is using the `Authorization Code Flow` (this will be the case if you have not changed it before)
+
+Open your local Application: http://localhost:8888/app-html5/ and try to Login with your GitHub Account.
+
+You will be asked to grant the access to your Git Repositories and all of your userdata. This comes from the default scope `user,repo` which we defined in the Identity Provider settings.
+
+After successful login Keycloak creates a local User in the Realm `techlab` and links this local User with the GitHub user. You will find every linked IdP of a local User under `Identity Provider Links` in the user details. If the local user already exists (the relevant key for mapping user accounts is the Email adress) you will be asked to link and merge the existing user with the new Identity Provider.
+
+The local User Account details can be managed under http://keycloak:8180/auth/realms/techlab/account.
+
+
+[TIP]
+====
+If you want to hide the Keycloak login mask, and point the User directly to the GitHub login page you can append a hint `&kc_idp_hint=github` to the URL on the client.
+====
+
+=== Further Information
+
+- GitHub's documentation about OAuth 2.0 integration: https://developer.github.com/apps/building-oauth-apps/
+- Available Scopes of GitHub: https://developer.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/
+
+
+'''
+[.text-right]
+link:../README.adoc[<- Techlab overview]

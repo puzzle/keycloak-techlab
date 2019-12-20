@@ -1,0 +1,97 @@
+= Secure a browser application (keycloak.js)
+
+This Lab is based on `app-jee-html5` of the link:https://github.com/keycloak/keycloak-quickstarts.git[Keycloak quickstarts]. It will be deployed as war to our Wildfly instance.
+
+[CAUTION]
+====
+This lab needs the service from the previous lab. Please make sure that it still works properly.
+====
+
+We start by creating the client definitions. Create a new client named `lab-js-app`. You have learned in the basics that a *Browser application* should use Implicit flow. Anyway start creating a client of _Flow Type_ `authorization code`.  The default setup of this quickstart is not working with `implicit` flow. We will change this later during this lab.
+
+////
+Create a new client `lab-js-app` with _Access Type_ `authorization code` and correct redirect and web origin url -->
+////
+
+In your Keycloak client definition goto the _Installation_ tab, select `Keycloak OIDC JSON` as format and download your client configuration.
+
+Move this to your project:
+
+[source,sh]
+----
+mv ~/downloads/keycloak.json ../keycloak-quickstarts/app-jee-html5/config
+----
+
+Within the file in your Keycloak client definition goto the _Installation_ tab, select `Keycloak OIDC JSON` as format and download your client configuration.
+
+Take a look into the source and specially the file `src/main/webapp/app.js`. Try to understand how Keycloak functionality is integrated.
+
+You may have noticed that the service URL needs to be changed. In the `app.js` file, set the `serviceURL` to http://localhost:8888/service.
+
+Build and deploy the application:
+
+[source,sh]
+----
+mvn install wildfly:deploy -Dwildfly.username=admin -Dwildfly.password=secret
+----
+
+[TIP]
+====
+Failed? If you got an error like `_Source/Target option 5 is no longer supported. Use 7 or later._`. Add the following into your `<properties>` section within `pom.xml`:
+
+[source,xml]
+----
+<maven.compiler.source>1.8</maven.compiler.source>
+<maven.compiler.target>1.8</maven.compiler.target>
+----
+====
+
+Open in your browser the application at http://localhost:8888/app-html5/.
+
+Play with the application an check if all functions work correctly.
+
+Is everything working correctly? If not you should maybe check your docker-compose logs for Keycloak.
+
+[TIP]
+====
+Check the JavaScript console in the browser if you are not able to authenticate by using the HTML5 Client. There might be warnings which can help to find a solution.
+====
+
+[TIP]
+====
+Check Keycloak logs using the command `docker-compose logs -f keycloak`. Your working directory has to be the techlab-setup directory where the docker-compose file is located.
+====
+
+[TIP]
+====
+If you get a `_Client is not allowed to initiate browser login with given response_type. Standard flow is disabled for the client._` exception in your Keycloak log you did instinctively everything right and configured your client of type `Implicit`. But unfortunately Keycloak link:https://www.keycloak.org/docs/latest/securing_apps/index.html#_javascript_implicit_flow[does not use the `Implicit` flow as default flow] for the javascript adapter.
+====
+
+Actually the `keycloak.js` file is copied into the source. Keycloak also offers the possibility to get the appropriate Keycloak version from the Keycloak server. Take a look into the link:https://www.keycloak.org/docs/latest/securing_apps/index.html#_javascript_adapter[javascript adapater documentation] and adapt our application accordingly. 
+
+////
+within `index.html` change to <script src="http://keycloak:8180/auth/js/keycloak.js"></script>.
+////
+
+Discuss with your neighbor what are the advantages and disadvantages of this approach.
+
+Now we want to edit the application to support only `Implicit` flow. Try it by your own. Use the link:https://www.keycloak.org/docs/latest/securing_apps/index.html#_javascript_adapter[javascript adapater documentation] as help.
+
+[TIP]
+====
+`Implicit` does not allow using _Refresh Tokens_. But there's code updating the token. Remove or uncomment it.
+====
+
+////
+Change client definition within keycloak to support implicit only.
+Change keycloak.init to support implicit within app.js: `keycloak.init( { flow: 'implicit'...`
+Remove token refresh in app.js (The stuff around req.send(); between lines 56-60.
+Refresh Tokens does not exist in the implicit flow.
+////
+
+Done? Very well. Now you have hands on experience with the _Authorization Code_ and the _Implicit_ flow. The two most complicated standard flows of OAuth 2.0.
+
+'''
+[.text-right]
+link:../README.adoc[<- Techlab overview] | 
+link:./05d_gatekeeper.adoc[Secure standard Application with Gatekeeper ->]

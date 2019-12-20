@@ -1,0 +1,76 @@
+= OAuth 2.0 - Security
+
+If you are interested in some details about how security is achieved within OAuth 2.0, you should read this chapter. Otherwise feel free to jump to the next chapter.
+
+First, the security of OAuth 2.0 is mainly based on TLS (https). So it's highly important to make sure, that the TLS settings are properly and up to date. Then there are some security considerations within the protocol/framework itself. We can recognize them at best with taking a look at the _Authorization Code_ Flow.
+
+The name giving feature of this flow is the _Authorization Code_:
+
+[quote, rfc6749]
+____
+Authorization codes operate as plaintext bearer credentials, used to verify that the resource owner who granted authorization at the authorization server is the same resource owner returning to the client to complete the process.
+____
+
+So the _Authorization Code_ binds the grant of the end-user and the token exchange to the same client. Now you maybe ask yourself why OAuth 2.0 is not directly returning the token after the authentication? This could avoid the need of such a code.
+
+As we have already seen, the answer is OAuth 2.0 is doing both. The _Implicit Flow_ is returning the token directly after the Authentication -- without the need of an _Authorization Code_ and a corresponding extra step.
+So we have to take a closer look into the difference between _Authorization Code_ and _Implicit_ Flow. But to understand this difference we need to know the purpose of the _Redirection URI_:
+
+[quote, rfc6749]
+____
+After completing its interaction with the resource owner, the authorization server directs the resource owner's user-agent back to the client. The authorization server redirects the user-agent to the client's redirection endpoint previously established with the authorization server during the client registration process or when making the authorization request.
+____
+
+In order to prevent attacks against stealing the token, the authorization server must ensure that the _Redirection URI_ used to obtain the _Authorization Code_ is identical to the _Redirection URI_ provided when exchanging the _Authorization Code_ for an access token.
+
+Besides it's important to know that OAuth 2.0 allows to use a non secured _Redirect URI_ (no usage of TLS). That allows specially developers to use non secured endpoints during implementation of applications.
+
+[NOTE]
+====
+To use non secured endpoints and a protocol that covers this use case properly is probably better than insecure development server (self-signed, missconfigured etc.).
+====
+
+So far we know three important security features of OAuth 2.0: TLS, Authorization Code, Redirection URI. Now we are ready to take a look into the difference between _Authorization Code_ and _Implicit_ Flow:
+
+The _implicit_ flow is only secure using a browser application. The access token is passed as part of the fragment in the redirect url to the user agent and will so never reach the redirection endpoint.
+
+[NOTE]
+====
+Fragments are never forwarded by the user agent. A fragment is indicated by the presence of a number sign (`#`) character and terminated by the end of the URI. See link:https://tools.ietf.org/html/rfc3986#section-3.5[rfc3986].
+====
+
+This avoids a possible MITM (man-in-the-middle) attack to an insecure redirect endpoint. This has the caveat of only being possible client side and needs javascript running client side to use the access token.
+
+The authorization code flow does not pass the access token directly in a URL parameter because URL parameters are part of the http request, therefore any intermediary server/routers by which your request would pass could be able to read the access token if you are not using a secured endpoint. This is why an intermediary one-time-use _Authorization Code_ is provided that only the legitimate receiver will be able to exchange and that the code will be useless to potential hackers intercepting the requests over insecured endpoints (if you use confidential clients!).
+
+[NOTE]
+====
+Passing the access token directly in a URL param could in theory be possible but the authorization sever would have to make sure the _Redirect URI_ is using https with TLS encryption and a 'trusted' SSL certificate to be sure that the destination server is legitimate and that the http request is fully encrypted.
+====
+
+You could also argue that the implicit flow is less secure, there are potential attack vectors like spoofing the domain upon redirect - for example by hijacking the IP address of the client's website. This is one of the reasons why the implicit flow only grants access tokens (which are supposed to have a limited time use) and never refresh tokens (which are unlimited in time). To remedy this issue, you should use TLS whenever possible. 
+
+This is the original theory and this is still valid as long as confidential clients are used. But today it's fact that there are some issues with public (non-confidential) an specially mobile clients using OAuth 2.0: An attacker could intercept the _Authorization Code_ returned from the authorization endpoint within a communication path not protected by TLS (e.g. inter-application communication within a client's operating system).
+
+You find details and a solution proposal to this attack in the link:https://tools.ietf.org/html/rfc7636[rfc7636]. Short the answer is *PKCE*:
+
+[quote, rfc7636]
+____
+OAuth 2.0 public clients utilizing the Authorization Code Grant are susceptible to the authorization code interception attack.  This specification describes the attack as well as a technique to mitigate against the threat through the use of Proof Key for Code Exchange (PKCE, pronounced "pixy").
+____
+
+You find more information about using PKCE with Keycloak link:https://www.keycloak.org/docs/latest/server_admin/index.html#_proof-key-for-code-exchange[here].
+
+[TIP]
+====
+The rfc6749 contains a detailed section about further link:https://tools.ietf.org/html/rfc6749#section-10[Security Considerations with OAuth 2.0].
+====
+
+[TIP]
+====
+Keycloak discusses possible security vulnerabilities in the chapter link:https://www.keycloak.org/docs/latest/server_admin/index.html#threat-model-mitigation[_Threat Model Mitigation_].
+====
+
+Further information and Sources:
+
+* https://stackoverflow.com/questions/13387698/why-is-there-an-authorization-code-flow-in-oauth2-when-implicit-flow-works-s

@@ -1,0 +1,7 @@
+= Puzzle ITC - Slides of the Keycloak Techlab
+
+Presentation based on reveal.js[https://revealjs.com]
+
+== Run
+
+`npm install && npm start`

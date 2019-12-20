@@ -1,0 +1,46 @@
+= Keycloak
+
+link:https://www.keycloak.org/[Keycloak] is a _Open Source Identity and Access Management_ and is the upstream project of link:https://access.redhat.com/products/red-hat-single-sign-on[RedHat SSO]. The sources are hosted on https://github.com/keycloak/keycloak[GitHub]. It's main goal: Make applications secure in a non-invasive way.
+
+image::https://www.keycloak.org/resources/images/keycloak_logo_480x108.png[]
+
+Keycloak is actively maintained (especially by red hat engineers) and offers among others:
+
+* Single Sign-on
+* Integration with LDAP and Active Directory
+* Multi-factor authentication
+* Standard Protocols (OAuth 2.0, OpenID Connect, SAML 2.0)
+* Adapters - Efficient integration of Clients
+* Multitenancy
+* Customize look and feel
+
+A more complete List with Keycloak features can be found https://www.keycloak.org/docs/latest/server_admin/index.html#features[here].
+
+[NOTE]
+====
+Some technical Facts about Keycloak:
+
+* Keycloak is built on top of WildFly application server, uses internally the provided frameworks like Infinispan and Hibernate.
+* It runs in a Java Virtual Machine and is based on Java EE
+* Keycloak can be run on any Operating System which runs a JVM.
+* As persistence layer a Database us used. Any Database with a JDBC driver can be used. Keycloak often is operated with PostgreSQL, MySQL or Oracle.
+* The minimal system requirements to run Keycloak are in listed in the https://www.keycloak.org/docs/7.0/server_installation/#system-requirements[Installation Manual].
+====
+
+*Keycloak is strongly based on OAuth 2.0 and its understanding*. It is helpful to understand the OAuth 2.0 protocol and OpenID Connect standard to understand the functionality of Keycloak.
+
+== Alternatives
+
+Incomplete List of alternative IAM systems.
+
+* https://www.openiam.com[OpenIAM]
+* https://wso2.com/identity-and-access-management/[WSO2 Identity Server]
+* https://auth0.com[Auth0]
+* https://www.gluu.org[Gluu Server]
+* https://syncope.apache.org[Apache Syncope]
+
+
+'''
+[.text-right]
+link:../README.adoc[<- Techlab overview] | 
+link:./01b_lab-setup.adoc[Lab Setup ->]

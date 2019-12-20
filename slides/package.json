@@ -1,0 +1,16 @@
+{
+  "name": "slides",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "reveal-md slides.md --watch --theme ./theme/puzzle.css",
+    "print": "reveal-md slides.md --theme ./theme/puzzle.css --print sprint-review.pdf"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "reveal-md": "^3.1.0"
+  }
+}

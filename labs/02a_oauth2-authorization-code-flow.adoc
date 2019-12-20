@@ -1,0 +1,179 @@
+= OAuth 2.0 - Authorization Code Flow
+
+== Introduction
+The _Authorization Code Flow_ is defined in the link:https://tools.ietf.org/html/rfc6749#section-4.1[rfc6749] as follows:
+
+[quote, rfc6749]
+____
+The authorization code grant type is used to obtain both access tokens and refresh tokens and is optimized for confidential clients. Since this is a redirection-based flow, the client must be capable of interacting with the resource owner's user-agent (typically a web browser) and capable of receiving incoming requests (via redirection) from the authorization server.
+____
+
+So, the _Authorization Code Flow_ is typically used by serverside web-applications or any other application type that can handle client credentials confidential. The name giving feature of this flow is an _Authorization Code_ that will be exchanged against an _Access Token_. Beside the _Implicit Flow_, this is one of the most used flows.
+
+== Detailed description of the flow by concrete example
+Step-by-step explanation of the Flow with example http requests and responses:
+
+image::../images/AuthorizationCodeFlow.svg[Authorization Code Flow sequence diagram]
+
+. A _User_ (_Resource Owner_) opens a browser (User-Agent) and wants to access a _Protected Resource_.
+. The _User_ is directed to the _Authorization Server_ login-page to authenticate himself and grants the access request. In practice usually the client adapter (the OAuth 2.0 library) builds the URL to which the _User Agent_ will be sent to show the login-page. The request sent by the Client looks like this:
+
++
+----
+GET /auth?response_type=code&
+          client_id=s6BhdRkqt3&
+          state=xyz&
+          redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcb HTTP/1.1
+Host: server.example.com
+----
++
+[NOTE]
+====
+The generated URL contains the following parameters:
+
+* `/auth`, OAuth 2.0 Endpoint used for authentication of the User (Resource Owner).
+* `response_type`: Defines that the response should contains an _Authorization Code_ (and not an _Access Token_).
+* `client_id`: The public identification of the Client. Must be registered in previously Keyloak and must be unique per Realm.
+* `redirect_uri`: The URL to which Keycloak should redirect the User Agent after the authentication of the Resource Owner. This parameter is optional.
+* `state`: Random String which can be used by the Client to match request and callback from Keycloak. Also used to prevent Cross-site request forgery attacks. 
+* `scope`: Scopes which the Client request access to. If OIDC is used the Scope must contain `openid`. Optional parameter.
+====
+. The user provides its credentials through the login form
+. The user is redirected back to the application and the issued Authorization Code is provided as a parameter in the callback URL.
++
+[source,http]
+----
+HTTP/1.1 302 Found
+Location: https://client.example.com/cb?code=SplxlOBeZQQYbYS6WxSbI&state=xyz
+----
++
+[NOTE]
+====
+The generated Redirection URL contains the following parameters:
+
+* `HTTP 302`, User Agent will be redirected by `Location` Header to the callback URL. The URL points to the server with the Protected Resources.
+* `code`: The issued Authorization Code by the Authorization Server. This code can now be changed against an Access Token.
+* `state`: Contains the same value as provided in the previous authorization request.
+====
++
+. The web application backend (Client) received the Authorization Code in the previous request which was initiated by Authorization Server through a redirection of the user agent. The Client now executes a request to pass the Authorization Code to the Authorization Server to exchange it against an Access Token.
++
+[source,http]
+----
+POST /token HTTP/1.1
+Host: server.example.com
+Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=authorization_code&code=SplxlOBeZQQYbYS6WxSbI&redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcb
+----
++
+[NOTE]
+====
+* `/token`, OAuth 2.0 Endpoint used issuing Access and Refresh Tokens.
+* `Authorization: Basic`: Authentication of the Client (backend of the web application) itself as a HTTP Basic auth.
+* `grant_type=authorization_code`: Defines that the provided code is a Authorization Code which should be exchanged against an Access Token.
+* `code`: The Authorization Code.
+* `redirect_uri`: Used in this request only for validation. The Authorization Server verifies, that the redirect URI matches the URI the User Agent was redirected in the response containing the Authorization Code.
+====
+
+. The Authorization Server returns after successful validation of the Authorization Token the new issued Access Token back to the Client.
++
+[source,http]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Cache-Control: no-store
+Pragma: no-cache
+{
+  "access_token":"2YotnFZFEjr1zCsicMWpAA",
+  "token_type":"example",
+  "expires_in":3600,
+  "refresh_token":"tGzv3JOkF0XG5Qx2TlKWIA",
+  "example_parameter":"example_value"
+}
+----
++
+[NOTE]
+====
+* `access_token` The Access Token itself
+* `token_type` Defines the type of the Access Token, usually of type `bearer` for OpenID Connect/JWT
+* `expires_in` Expiration of the issued Token in seconds.
+* `refresh_token` An optional Refresh Token (more on this in a later chapter in this Techlab)
+* `example_parameter` The Authorization Server is free to include other parameters in the response.
+====
+
+. The web application (Client) accesses the Protected Resources by providing the Access Token in all subsequent requests. Typically this is done with an HTTP Authorization Header: `Authorization: Bearer <acces-token>`
+
+. The Protected Resources are delivered to the Client.
+
+[TIP]
+====
+There is a more abstract and theoretical flow explanation in the link:https://tools.ietf.org/html/rfc6749#section-4.1[rfc6749]
+====
+
+== Setup lab
+To demonstrate quickly the Authorization Code Flow we need a local web-application to handle the callback/redirect. In this lab we use a NodeJS based application. The application is already included in the Docker Compose file of techlab-setup. Open browser and go to http://localhost:3001/techlab-service/public. You should get the public available response `{"message":"public"}`, which means your NodeJS application works as expected.
+
+
+== Lab
+
+=== Create a new Client (an Application or Relying Party)
+
+Create a new public Client `techlab-cli`
+
+    Clients -> Create -> Client ID: techlab-cli -> Save
+
+Enable all Flows and configure Redirect-URI for Client `techlab-cli`:
+
+* Enable `Standard Flow`, `Implicit Flow` and `Direct Access Grants`.
+* Set `Valid Redirect URI` of Client to `http://localhost:3001/*`.
+
+[NOTE]
+====
+Before a Client can use the services provided by an Authorization Server (Keycloak) it has to be registered with at least the following parameters defining the Client:
+
+* *Client ID* Unique identifier defining the Client.
+* *Redirection URI* The URI to which the User will be redirected after successful authentication by Keycloak.
+* *Client Type* Public or Confidential (or Bearer-only which is Keycloak specific).
+
+The registration is normally done by an End-User in a HTTP based Form provided by IAM system as you just done it one minute ago.
+
+How exactly the Client Registration works is not covered by the OAuth 2.0 specification.
+====
+
+
+=== Open the Client Application and follow the Flow
+
+Open Development Tools of your favourite browser and capture the HTTP traffic with the development tools (F12).
+
+Open the protected url http://localhost:3001/techlab-service/secured. You will be redirected to a login form provided by Keycloak.
+
+Try to understand the flow of requests and responses and assign
+
+[QUESTION]
+====
+What did the NodeJS Application response to the HTTP GET Request to http://localhost:3001/techlab-service/secured and which action will the browser do next?
+====
+
+Login with user `nerd` and password `quirky`.
+
+You will be redirected back to url http://localhost:3001/techlab-service/secured and see the response `{"message":"secured"}`.
+The Authorization Code Flow successfully worked and the User `nerd` has been authenticated and authorized by Keycloak.
+
+[TIP]
+====
+The NodeJS Application expects the user to have the role `techlab-user` associated.
+====
+
+== Lab Solutions
+Solutions of this Lab can be found link:../solutions/02a_oauth2-authorization-code-flow-solutions.adoc[here].
+
+
+== Sources
+* https://tools.ietf.org/html/rfc6749#section-4.1
+
+'''
+[.text-right]
+link:../README.adoc[<- Techlab overview] | 
+link:./02b_oauth2-implicit-flow.adoc[OAuth 2.0 Implicit Flow ->]

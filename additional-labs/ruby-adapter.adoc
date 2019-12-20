@@ -1,0 +1,12 @@
+= Ruby on Rails Adapter
+
+For Ruby on Rails, there is currently no official adapter from Keycloak. We recommend that you only use adapters that use the OAuth 2.0 protocol in the true sense of the defined APIs and not, for example, integrate the Authorization Server via an Admin API.
+
+For Puzzle a set-up was tested as part of implementing the _Puzzle Skills_ application. Details are shown here: https://wiki.puzzle.ch/Puzzle/KeycloakUserGuide.
+
+= Keycloak Gem
+
+https://github.com/imagov/keycloak
+
+
+Beispiel Rails Applikation: https://github.com/imagov/example-gem-keycloak

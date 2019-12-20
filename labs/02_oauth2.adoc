@@ -1,0 +1,154 @@
+= OAuth 2.0 - Open Authorization Framework 2.0
+
+OAuth 2.0 is an extensible *Authorization Protocol and Framework* specified in link:https://tools.ietf.org/html/rfc6749[rfc6749] and approved in year 2012. One of the main drivers behind OAuth 2.0 were (and still are) the social networks.
+
+*The main goal of OAuth 2.0 is access delegation: Grant access for 3rd parties to your data without the need for sharing your credentials.*
+
+A more abstract definition out of the rfc:
+[quote, rfc6749]
+____
+The OAuth 2.0 authorization framework enables a third-party application to obtain limited access to an HTTP service, either on behalf of a resource owner by orchestrating an approval interaction between the resource owner and the HTTP service, or by allowing the third-party application to obtain access on its own behalf.
+____
+
+
+== An example use-case for OAuth 2.0
+A User want to design a new photo book in a webbased photo book design application. His pictures are all stored in the cloud on a storage provider (like e.g. google or facebook). The user grants the design application access to his pictures which are stored within the cloud.
+
+With a classical Client-Server Authentication model the User needs to provide his username and password to the design application to grant access to his pictures within the cloud. This approach brings some *critical issues*:
+
+* The *credentials are shared with a possible insecure application*. Even if the application is not an evil one, the user can't trust the design app to store his credentials securely.
+* The photo book app got *full access* to the users store. But it only needs access to exactly one service (directory) which provides the pictures used for this album.
+* It is impossible to *revoke access* of only one single third party application. Imagine the user has provided his credentials for an online printing service before as well. Because he has to change his credentials, he can't revoke access for just this printing service but not for the photo book app.
+
+This is where OAuth 2.0 jumps in to resolve this issues: It's all about access delegation.
+
+
+== Roles in OAuth 2.0
+OAuth 2.0 defines four roles which are explained in the following subchapters.
+
+
+=== Resource Owner
+An entity capable of granting access to a protected resource. When the _Resource Owner_ is a person, it is referred to as an end-user. Often the _Resource Owner_ is a person which manually grants access to protected resources.
+
+For the example above the user which want to create an photo book represents the _Resourcen Owner_.
+
+=== Client
+An application making requests to a protected resource on behalf of the resource owner and with its authorization. 
+
+[NOTE]
+====
+The term "client" does not imply any particular implementation characteristics (e.g., whether the application executes on a server, a desktop, or other devices).
+====
+
+In the example above the design application would be the the _Client_.
+
+[NOTE]
+====
+With OAuth 2.0, Clients as well as End-Users can authenticate themselves. The prerequisite is that the Clients are able to handle the client secret confidentially. Confidential clients are named `confidential` and non-confidential clients are named `public`.
+
+If you create clients you specially have to ask yourself the following questions:
+
+* Can my client keep information confidential (is he trustworthy)? A javascript or mobile application is usually not able to keep data confidential so the client will be of type public.
+* Is my application independent in terms of access logic, runtime (e.g. host) or lifecycle? Specially do not mix frontend and backend services at OAuth Client level if they are disconnected at the deployment level.
+====
+
+
+=== Resource Server
+This is a server hosting the protected resources. The _Resource Server_ acts as policy enforment point and will validate the Access Tokens the Clients submits with every requests.
+
+In the example above the cloud storage provider would be the _Resource Server_.
+
+
+=== Authorization Server (e.g. Keycloak)
+The server authorizing access (issuing Access Tokens) to the client after successfully authenticating the _Resource Owner_ (depending on the flow, which we will explain later in this lab) and obtaining authorization.
+
+In the example above the _Authorization Server_ would by typically a separate server which can communicate with the user-agent (browser), the _Client_ and the _Resource Server_.
+
+
+== Protocol Endpoints
+
+According the OAuth 2.0 specification the _Authorization Server_ has to provide at least two HTTP endpoints:
+
+* *Authorization endpoint* -- used by the client to obtain authorization from the resource owner via user-agent redirection.
+
+* *Token endpoint* -- used by the client to exchange an authorization grant for an access token, typically with client authentication.
+
+The *Redirection endpoint* is on the client-side and used by the _Authorization Server_ to return responses containing authorization credentials to the client via the resource owner user-agent.
+
+
+== Abstract Protocol Flow
+
+.Abstract OAuth 2.0 Protocol Flow of rfc6479
+----
++--------+                               +---------------+
+|        |--(A)- Authorization Request ->|   Resource    |
+|        |                               |     Owner     |
+|        |<-(B)-- Authorization Grant ---|               |
+|        |                               +---------------+
+|        |
+|        |                               +---------------+
+|        |--(C)-- Authorization Grant -->| Authorization |
+| Client |                               |     Server    |
+|        |<-(D)----- Access Token -------|               |
+|        |                               +---------------+
+|        |
+|        |                               +---------------+
+|        |--(E)----- Access Token ------>|    Resource   |
+|        |                               |     Server    |
+|        |<-(F)--- Protected Resource ---|               |
++--------+                               +---------------+
+----
+
+The abstract OAuth 2.0 flow illustrated describes the interaction between
+the four roles and includes the following steps:
+
+* *(A)* -- The client requests authorization from the resource owner. The authorization request can be made directly to the resource owner (as shown), or preferably indirectly via the authorization server as an intermediary.
+
+* *(B)* -- The client receives an authorization grant, which is a credential representing the resource owner's authorization, expressed using one of four grant types defined in this specification or using an extension grant type.  The authorization grant type depends on the method used by the client to request authorization and the types supported by the authorization server.
+
+* *\(C)* -- The client requests an access token by authenticating with the authorization server and presenting the authorization grant.
+
+* *(D)* -- The authorization server authenticates the client and validates the authorization grant, and if valid, issues an access token.
+
+* *(E)* -- The client requests the protected resource from the resource server and authenticates by presenting the access token.
+
+* *(F)* -- The resource server validates the access token, and if valid, serves the request.
+
+There is a out-of-band trust between _authorization server_ and _resource server_.
+
+
+== Scopes
+OAuth 2.0 defines the mechanism of Scoping. A Client can optionally requests one or more Scopes in the Authorization Request to which it wants to access data from. 
+
+The Resource Owner has to grant explicitly access to all requested Scopes. You certainly have already seen consent dialogs of kind "_Fancy Application wants to access your contact list, your phone number and your birthday._" These three requests are corresponding to three different Scopes in the OAuth 2.0 context.
+
+Granted scopes will be contained in the issued Access Token. Scopes are defined in link:https://tools.ietf.org/html/rfc6749#section-3.3[section 3 of the rfc6749].
+
+
+[TIP]
+====
+Have a look at the available https://developer.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/[Scopes for a GitHub User Profile]. The Client application can precise define which information of the User profile he wants to request.
+====
+
+
+== Authorization Grant Types & Flows
+The OAuth 2.0 specification defines four default Authorization Grant Types. Each Grant Type has a protocol Flow associated. It is important to know those four Flows and which Flow is used for the different Clients.
+
+The following four chapters will deal with the OAuth 2.0 standard Flows:
+
+. link:/labs/02a_oauth2-authorization-code-flow.adoc[Authorization Code Flow]
+. link:/labs/02b_oauth2-implicit-flow.adoc[Implicit Code Flow]
+. link:/labs/02c_oauth2-client-credentials-flow.adoc[Client Credentials Flow]
+. link:/labs/02d_oauth2-resource-owner-credentials-flow.adoc[Resource Owner Credentials Flow]
+
+The OAuth 2.0 specification is designed extensible for additional Flows. An example Flow which is not contained in OAuth 2.0 spec. is the  https://tools.ietf.org/html/rfc8628#section-3.4[Device Code Flow].
+
+If you are interested in some security insights of OAuth 2.0 see additional lab link:/labs/02x_oauth2-security.adoc[Security]
+
+== Sources
+* https://tools.ietf.org/html/rfc6749
+
+'''
+[.text-right]
+link:../README.adoc[<- Techlab overview] | 
+link:./02a_oauth2-authorization-code-flow.adoc[OAuth 2.0 Authorization Code Flow ->]

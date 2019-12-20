@@ -1,0 +1,67 @@
+= Puzzle ITC - Keycloak Techlab Documentation
+
+[.lead]
+This _Techlab_ is based on Keycloak version 7.
+
+[IMPORTANT]
+====
+This Techlab contains exercises and solutions. The solutions are partially integrated as asciidoc comments. Use a asciidoc visualizer to play the Techlab without solutions.
+====
+
+== Agenda & slides
+
+* link:/agenda.adoc[Agenda]
+* link:/slides/README.md[Slides]
+
+== Contents
+
+. link:/labs/00_introduction.adoc[Introduction]
+
+   Introduction to the topic IAM - Identity and Access Management and related terminology.
+
+. link:/labs/01_keycloak.adoc[Keycloak]
+
+   Short intro to Keycloak.
+
+. link:/labs/01b_lab-setup.adoc[Lab Setup]
+
+   Setup of the local environment the techlab is based on.
+
+. link:/labs/02_oauth2.adoc[OAuth 2.0]
+
+   OAuth 2.0 incl. hands-on exercises.
+
+. link:/labs/03_openidconnect.adoc[OpenID connect]
+
+   OpenIdConnect incl. hands-on exercises.
+
+. link:/labs/04_tokens.adoc[Tokens]
+
+   Bearer-, JSON, by-reference etc. incl. hands-on exercises.
+
+. link:/labs/05_secure-applications.adoc[Secure Applications]
+
+   Some basic examples using Spring Boot, JEE, JavaScript and Gatekeeper to secure applications incl. hands-on exercises.
+
+. link:./labs/06_additional-labs.adoc[Additional Labs]
+   
+   More labs you can choose from.
+
+. link:/labs/glossary.adoc[Glossary]
+
+. link:/labs/faq.adoc[FAQ] 
+
+. link:https://speakneon.com/udRWTl9XX[Help us to improve, give feedback!]
+
+
+== Resources used in this Techlab
+
+* Local Keycloak Setup: https://github.com/puzzle/keycloak-techlab-setup
+* Keycloak quickstarts: https://github.com/keycloak/keycloak-quickstarts
+* docker, docker-compose, cURL, maven
+
+
+== Additional information
+
+* https://www.keycloak.org/documentation.html[Keycloak documentation]
+* https://www.katacoda.com/?q=keycloak[Katacoda Keycloak course]

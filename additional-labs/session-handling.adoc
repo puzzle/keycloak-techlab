@@ -1,0 +1,37 @@
+= HTTP Session Handling
+
+This Lab shows how Cookie-based Sessions between the End User and Keycloak are managed.
+
+[CAUTION]
+====
+This lab is based on the the lab link:../labs/02a_oauth2-authorization-code-flow.adoc[OAuth 2.0 Authorization Code Flow Lab]. Please make sure this lab is still working properly.
+====
+
+Open your browser with developer tools and login again the NodeJS based application under http://localhost:3001/techlab-service/secured.
+
+Try to find the cookies issued by the NodeJS backend and by Keycloak with your Browser developer tools.
+
+Find out the meaning of those cookies. Play around, delete them and look what happens.
+
+[TIP]
+====
+Hit http://localhost:3001/logout to logout the User from the Application.
+====
+
+The cookie with name `connect.sid` defines the HTTP Session between the Browser and the NodeJS Backend. Delete it and access the protected endpoint again.
+
+* What happens now? Try to capture the Flow by recording the HTTP traffic of your User Agent. Do you have to authenticate again against Keycloak? Why you have to / don't have to authenticate again?
+
+This behaviour can be changed by disabling Browser Cookie based auth in the Keycloak Admin Console under `Authentication -> Flows -> Browser -> Cookies -> Disabled`. Do it.
+
+Delete the cookie `connect.sid` again, and try to access the protected endpoint again. Whats happening now?
+
+How can you revoke the access of the Client to the Protected Ressource immediately?
+
+
+== Lab Solutions
+Solutions of this Lab can be found link:./session-handling-solutions.adoc[here].
+
+'''
+[.text-right]
+link:../README.adoc[<- Techlab overview]

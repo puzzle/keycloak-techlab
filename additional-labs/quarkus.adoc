@@ -1,0 +1,176 @@
+= Quarkus
+
+In this lab you will learn how to protect and integrate a Quarkus based Application in Keycloak Security.
+
+You will find the Project in the Git repository https://github.com/puzzle/keycloak-techlab-setup/tree/master/quarkus-keycloak.
+
+== Run the Lab without security integration
+Run the demo application locally by executing the Maven wrapper script:
+
+[source,bash]
+----
+./mvnw clean package quarkus:dev
+----
+
+You will find the following both endpoints returning some data:
+
+```
+curl -v http://localhost:8080/service/public
+curl -v http://localhost:8080/service/user
+curl -v http://localhost:8080/service/admin
+```
+
+
+== Restrict access to Resources
+
+We want to protect the Admin and the User endpoint with different Roles. The public endpoint remains open to everyone.
+
+Make the getter in UserResource.java accessible only for users with an associated Role `user`. Annotate the method with `RolesAllowed`:
+
+[source,java]
+----
+@GET
+@NoCache
+@Produces(MediaType.APPLICATION_JSON)
+@javax.annotation.security.RolesAllowed("user")
+public User me() {
+    return new User();
+}
+----
+
+
+Protect the Admin endpoint in AdminResource.java for users with role `admin` as well.
+
+
+Start the Application again and try to access the admin endpoint again:
+[source,bash]
+----
+./mvnw clean package quarkus:dev
+curl -v http://localhost:8080/service/admin
+----
+
+You should now get an HTTP 401 Unauthorized for the protected endpoints `/service/admin` and `/service/user`.
+
+
+== Configure Keycloak
+
+Create a new `public` Client in Keycloak with name `lab-quarkus` and set the Property "Direct Acces Grants Enabled" to `ON`. 
+
+Create Roles `user` and `admin` for the Client `lab-quarkus`
+
+Add Role Mappings for the user `nerd` with those two newly creates roles
+
+
+== Integrate and configure Keycloak Adapter
+
+Add the dependency of Keycloak Quarkus Adapter to your Maven settings. Open pom.xml in the project root and add the following snippet:
+
+[source,xml]
+----
+  <dependencies>
+    ...
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-keycloak</artifactId>
+      <version>${quarkus.version}</version>
+    </dependency>
+    ...
+  </dependencies>
+----
+
+The version of the `quarkus-keycloak` artifact is provided by the `quarkus-bom` which is imported in the dependencyManagement section.
+
+To configure the Keycloak Adaper create a new File `quarkus-keycloak/src/main/resources/keycloak.json` with the following content:
+
+[source,json]
+----
+{
+  "realm": "techlab",
+  "auth-server-url": "http://keycloak:8180/auth",
+  "ssl-required": "external",
+  "resource": "lab-quarkus",
+  "public-client": true,
+  "use-resource-role-mappings": true
+}
+----
+
+
+== Read Username from SecurityContext
+
+Next we want to read the name of the currently logged in User from the security context and return it as payload. Replace the existing UsersResource.java with the following content:
+
+
+[source,java]
+----
+package quarkuskeycloak.boundary;
+
+import org.jboss.resteasy.annotations.cache.NoCache;
+import org.keycloak.KeycloakSecurityContext;
+
+import javax.annotation.security.RolesAllowed;
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+@Path("/service/user")
+public class UsersResource {
+
+    @Inject
+    KeycloakSecurityContext keycloakSecurityContext;
+
+    @GET
+    @RolesAllowed("user")
+    @Produces(MediaType.APPLICATION_JSON)
+    @NoCache
+    public User me() {
+        return new User(keycloakSecurityContext);
+    }
+
+    public class User {
+
+        private final String userName;
+
+        User(KeycloakSecurityContext securityContext) {
+            this.userName = securityContext.getToken().getPreferredUsername();
+        }
+
+        public String getUserName() {
+            return userName;
+        }
+    }
+}
+----
+
+The `KeycloakSecurityContext` is a Keycloak specific class and is provided by the Keycloak Adapter.
+
+
+== Access the protected endpoints
+
+Generate an access Token by using the Resource Owner Credentials Flow:
+
+[source,bash]
+----
+export access_token=$( \
+curl -s -X POST http://keycloak:8180/auth/realms/techlab/protocol/openid-connect/token \
+    -H "content-type: application/x-www-form-urlencoded" \
+    -d "client_id=lab-quarkus&username=nerd&password=quirky&grant_type=password" | jq --raw-output '.access_token' \
+)
+----
+
+Verify the generated Access Token:
+
+[source,bash]
+----
+echo $access_token | cut -d "." -f 2 | base64 -d | jq
+----
+
+
+Access the Endpoints with with the provided Access Token:
+
+[source,bash]
+----
+curl -v http://localhost:8080/service/admin -H "Authorization: Bearer $access_token"
+curl -v http://localhost:8080/service/user -H "Authorization: Bearer $access_token"
+----

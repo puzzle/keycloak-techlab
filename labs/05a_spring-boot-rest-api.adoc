@@ -29,7 +29,7 @@ In this lab we are going to create a restful _Resource Server_ and requesting it
                                                    +-------------------------------------+
 ----
 
-For this lab it's a good idea to start with the client definition for Keycloak. So open your link:http://keycloak:8180[Administration Console] and create a new client named `lab-spring-rest-api`. You have learned the basics of what important settings an *API client* needs in the previous theoretical labs (type of flows/grant, type of clients etc.). For the rest api we are going to use a special and client type called `bearer-only`. This is a Keycloak specific client.
+For this lab it's a good idea to start with the client definition for Keycloak. So open your link:http://keycloak:8180[Administration Console] and create a new client named `lab-spring-rest-api`. You have learned the basics of what important settings an *API client* needs in the previous theoretical labs (type of flows/grant, type of clients etc.). For a REST API we are going to use a special client type called `bearer-only`. This is a Keycloak specific client.
 
 [TIP]
 ====
@@ -55,7 +55,7 @@ Check the _Installation_ tab within your Client settings of your Keycloak Admini
 ====
 
 ////
-keycloak.realm=techlab --> (fancy exception if not set: "Error when sending request to retrieve realm keys")
+keycloak.realm=techlab --> (fancy exception possible if not set: "Error when sending request to retrieve realm keys")
 keycloak.auth-server-url=http://keycloak:8180/auth
 keycloak.ssl-required=none
 keycloak.resource=lab-spring-rest-api
@@ -72,29 +72,30 @@ mvn spring-boot:run
 
 [TIP]
 ====
-Failed? If you got an error like `_Source/Target option 5 is no longer supported. Use 7 or later._`. Add the following into your `<properties>` section within `pom.xml`:
+Failed? If you got an error like `_Source/Target option 5 is no longer supported. Use 7 or later._`. Add the following into your `<properties>` section within `pom.xml` (adjust the Java version to your local JDK version):
 
 [source,xml]
 ----
-<maven.compiler.source>1.8</maven.compiler.source>
-<maven.compiler.target>1.8</maven.compiler.target>
+<java.version>1.11</java.version>
+<maven.compiler.source>1.11</maven.compiler.source>
+<maven.compiler.target>1.11</maven.compiler.target>
 ----
 ====
 
 [TIP]
 ====
-Failed? If you got an error like `_Error creating bean with name 'org.keycloak.adapters.springboot.KeycloakAutoConfiguration': Unsatisfied dependency expressed through method 'setKeycloakSpringBootProperties' parameter 1_`. Congratulations, you met your propably first link:https://issues.jboss.org/browse/KEYCLOAK-11282[Keycloak Bug]. Copy the Java class `MyKeycloakSpringBootConfigResolver.java` from the `techlab-content` git Repository into the project source:
+Failed? If you got an error like `_Error creating bean with name 'org.keycloak.adapters.springboot.KeycloakAutoConfiguration': Unsatisfied dependency expressed through method 'setKeycloakSpringBootProperties' parameter 1_`. Congratulations, you met your propably first link:https://issues.jboss.org/browse/KEYCLOAK-11282[Keycloak Bug]. Copy the Java class `KeycloakConfig.java` from the `techlab-content` git Repository into the project source:
 
 [source,sh]
 ----
-cp MyKeycloakSpringBootConfigResolver.java ../keycloak-quickstarts/service-springboot-rest/src/main/java/org/keycloak/quickstart/springboot
+cp KeycloakConfig.java ../keycloak-quickstarts/service-springboot-rest/src/main/java/org/keycloak/quickstart/springboot
 ----
 
-Additionally it may be a good idea to update to the latest spring version. In the pom.xml change the spring version to the following:
+Additionally it may be a good idea to update to the latest spring version. In the pom.xml change the spring version to the following (see https://repo.spring.io/release/org/springframework/boot/spring-boot/):
 
 [source,xml]
 ----
-<springboot-version>2.1.8.RELEASE</springboot-version>
+<springboot-version>2.2.4.RELEASE</springboot-version>
 ----
 ====
 
@@ -129,11 +130,11 @@ Create your Basic-Auth credentials with the following command:
 ====
 
 ////
-echo -n "techlab-cli-confidential:0160c6c6-e849-4a6e-8ba4-2422cf4df246" | base64 -w0
+echo -n "techlab-cli-confidential:8188f1b5-b64a-4b4d-a404-938acf8d003f" | base64 -w0
 
 export access_token=$(\
    curl -X POST http://keycloak:8180/auth/realms/techlab/protocol/openid-connect/token \
-   -H 'Authorization: Basic dGVjaGxhYi1jbGk6MDE2MGM2YzYtZTg0OS00YTZlLThiYTQtMjQyMmNmNGRmMjQ2' \
+   -H 'Authorization: Basic dGVjaGxhYi1jbGktY29uZmlkZW50aWFsOjgxODhmMWI1LWI2NGEtNGI0ZC1hNDA0LTkzOGFjZjhkMDAzZg==' \
    -H 'content-type: application/x-www-form-urlencoded' \
    -d 'username=nerd&password=quirky&grant_type=password' | jq --raw-output '.access_token' \
 )
@@ -171,7 +172,7 @@ As you may have noticed, the Role `user` for the endpoint `/products` is checked
 
 Is it working? Good.
 
-Assuming the role `user` is not a general role of our organization (realm). Now if other applications come with similar roles, we would have to introduce a naming concept - which is really not very pretty. Keycloak offers the possibility to define the roles also on client level. Try to adjust the lab accordingly. See Keycloak Documentation link:https://www.keycloak.org/docs/6.0/server_admin/#client-roles[for Roles] and check Keycloak Java Adapater link:https://www.keycloak.org/docs/6.0/securing_apps/index.html#_java_adapter_config[configuration options].
+Assuming the role `user` is not a general role of our organization (realm). Now if other applications come with similar roles, we would have to introduce a naming concept - which is really not very pretty. Keycloak offers the possibility to define the roles also on client level. Try to adjust the lab accordingly. See Keycloak Documentation link:https://www.keycloak.org/docs/latest/server_admin/#client-roles[for Roles] and check Keycloak Java Adapater link:https://www.keycloak.org/docs/latest/securing_apps/index.html#_java_adapter_config[configuration options].
 
 [TIP]
 ====

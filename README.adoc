@@ -1,7 +1,7 @@
 = Puzzle ITC - Keycloak Techlab Documentation
 
 [.lead]
-This _Techlab_ is based on Keycloak version 7.
+This _Techlab_ is based on Keycloak version 8.
 
 [IMPORTANT]
 ====

@@ -37,6 +37,11 @@ Create a confidential client definition for gatekeeper in Keycloak with the name
 Gatekeeper is kind of a backend-application, you may choose the default flow type.
 ====
 
+////
+Standard Flow: Enable
+Access Type: Confidential
+////
+
 Go to the docker-compose setup and adjust the client-secret to the newly generated one.
 
 [TIP]
@@ -65,10 +70,10 @@ Client -> Mappers -> Create -> Mapper Type: Audience -> Included Client Audience
 
 Does the request work now? 
 
-Currently you just have to be authenticated to access the httpbin resources via the gatekeeper proxy. As a next step we would like to additionally authorize the call to `/ip` and `/anything` using separate roles in Keycloak. Try to implement that.
+Currently you just have to be authenticated to access the httpbin resources via the gatekeeper proxy. As a next step we would like to additionally authorize the call to `/ip` and `/anything` using separate client roles in Keycloak. Try to implement that.
 
 ////
-* Create two new Roles gatekeeper-ip and gatekeeper-anything and map them to user
+* Create two new Client Roles gatekeeper-ip and gatekeeper-anything and map them to user
 * Extend the startup command in docker-compose.yaml of Gatekeeper:
     command:
       - --verbose=true
@@ -83,7 +88,6 @@ Currently you just have to be authenticated to access the httpbin resources via 
       - --resources=uri=/ip|roles=lab-gatekeeper:gatekeeper-ip
       - --resources=uri=/anything|roles=lab-gatekeeper:gatekeeper-anything
       - --upstream-url=http://httpbin:80
-
 ////
 
 [TIP]

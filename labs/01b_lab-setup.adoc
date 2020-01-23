@@ -82,15 +82,15 @@ Create a new _User_ with name `nerd`
 
 Set the initial Password of the User `nerd` to `quirky`
 
-    Users -> select User nerd -> Credentials -> set new Password -> Set "Temporary" to off -> Reset Password
+    Users -> select User nerd -> Credentials -> set new Password -> Set "Temporary" to off -> Set Password
 
-Go to http://keycloak:8180/auth/realms/techlab/account and login with the newly created user to verify everthing went well so far.
+Go to http://keycloak:8180/auth/realms/techlab/account and login with the newly created user to verify everything went well so far.
 
 == Create a Realm Role (a global Access Right at Realm level)
 
 Next create a new _Role_ with name `techlab-user` in this Realm:
 
-    Roles -> Add Role -> Role Name: techlab-user -> Save
+    Roles -> Add Role -> Role Name: `techlab-user` -> Save
 
 [TIP]
 ====

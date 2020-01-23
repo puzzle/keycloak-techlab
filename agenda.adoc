@@ -6,4 +6,4 @@
 * OAuth 2.0 (120')
 * OpenID connect and Tokens (30')
 * Lunch
-* Hands-on labs
+* Hands-on Labs

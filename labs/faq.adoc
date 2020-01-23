@@ -54,8 +54,7 @@ Keycloak supports the common standards for OAuth 2.0 and OpenID Connect. So you 
 
 It's either or. See also https://issues.jboss.org/browse/KEYCLOAK-1720. But you could proof it manually (specially if you are not using JEE) using the methods `getResourceAccess(clientId).getRoles()` and `getRealmAccess().getRoles()` of the link:https://github.com/keycloak/keycloak/blob/master/core/src/main/java/org/keycloak/representations/AccessToken.java[AccessToken.java] class.
 
-// TODO make an example?
-
+// TODO: make an example?
 
 '''
 [.text-right]

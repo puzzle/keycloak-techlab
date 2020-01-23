@@ -1,8 +1,6 @@
 = Glossary
 
-
 // TODO: Translate to english
-
 
 .Glossary
 [cols="3,5a"options="header"]
@@ -74,8 +72,6 @@
 | Information die einer Entity attached ist wie bspw. zu einem Client im OpenID Connect Kontext.
 
 |===
-
-
 
 '''
 [.text-right]

@@ -3,7 +3,6 @@
 == Labs you can choose from
 
 * link:../additional-labs/oauth2-security.adoc[OAuth 2.0 security]
-* link:../additional-labs/pitc-sso.adoc[Puzzle ITC SSO]
 * link:../additional-labs/ruby-adapter.adoc[Ruby on Rails adapter]
 * link:../additional-labs/idp-github.adoc[Integrating GitHub as external Identitiy Provider]
 * link:../additional-labs/quarkus.adoc[Protect Quarkus based application with Keycloak]

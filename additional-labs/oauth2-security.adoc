@@ -50,7 +50,7 @@ Passing the access token directly in a URL param could in theory be possible but
 
 You could also argue that the implicit flow is less secure, there are potential attack vectors like spoofing the domain upon redirect - for example by hijacking the IP address of the client's website. This is one of the reasons why the implicit flow only grants access tokens (which are supposed to have a limited time use) and never refresh tokens (which are unlimited in time). To remedy this issue, you should use TLS whenever possible. 
 
-This is the original theory and this is still valid as long as confidential clients are used. But today it's fact that there are some issues with public (non-confidential) an specially mobile clients using OAuth 2.0: An attacker could intercept the _Authorization Code_ returned from the authorization endpoint within a communication path not protected by TLS (e.g. inter-application communication within a client's operating system).
+This is the original theory and this is still valid as long as confidential clients are used. But today it's fact that there are some issues with public (non-confidential) and specially native/mobile clients using OAuth 2.0: An attacker could intercept the _Authorization Code_ returned from the authorization endpoint within a communication path not protected by TLS (e.g. inter-application communication within a client's operating system).
 
 You find details and a solution proposal to this attack in the link:https://tools.ietf.org/html/rfc7636[rfc7636]. Short the answer is *PKCE*:
 

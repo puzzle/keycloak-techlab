@@ -1,0 +1,128 @@
+= Securing native Application with OAuth 2.0
+
+The link:https://tools.ietf.org/html/rfc8252[rfc8252] covers how to use OAuth 2.0 for Native Apps:
+
+[quote, rfc8252]
+____
+OAuth 2.0 authorization requests from native apps should only be made through *external* user-agents, primarily the user's browser. This specification details the security and usability reasons why this is the case and how native apps and authorization servers can implement this best practice.
+____
+
+This additional lab does not cover the rfc in detail and shows only how to secure Applications with OAuth 2.0 and specially Keycloak.
+
+== Abstract Protocol
+
+This sections show the abstract protocol flow of rfc8252. The flow is principal similar to the link:../02a_oauth2-authorization-code-flow.adoc[authorization code flow].
+
+```
+  +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+  |          User Device          |
+  |                               |
+  | +--------------------------+  | (5) Authorization  +---------------+
+  | |                          |  |     Code           |               |
+  | |        Client App        |---------------------->|     Token     |
+  | |                          |<----------------------|    Endpoint   |
+  | +--------------------------+  | (6) Access Token,  |               |
+  |   |             ^             |     Refresh Token  +---------------+
+  |   |             |             |
+  |   |             |             |
+  |   | (1)         | (4)         |
+  |   | Authorizat- | Authoriza-  |
+  |   | ion Request | tion Code   |
+  |   |             |             |
+  |   |             |             |
+  |   v             |             |
+  | +---------------------------+ | (2) Authorization  +---------------+
+  | |                           | |     Request        |               |
+  | |          Browser          |--------------------->| Authorization |
+  | |                           |<---------------------|    Endpoint   |
+  | +---------------------------+ | (3) Authorization  |               |
+  |                               |     Code           +---------------+
+  +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+
+   (1)  Client app opens a browser tab with the authorization request.
+
+   (2)  Authorization endpoint receives the authorization request,
+        authenticates the user, and obtains authorization.
+        Authenticating the user may involve chaining to other
+        authentication systems.
+
+   (3)  Authorization server issues an authorization code to the
+        redirect URI.
+
+   (4)  Client receives the authorization code from the redirect URI.
+
+   (5)  Client app presents the authorization code at the token
+        endpoint.
+
+   (6)  Token endpoint validates the authorization code and issues the
+        tokens requested.
+```
+
+== Important details
+
+=== PKCE - Proof Key for Code Exchange 
+
+Mostly, native applications represent non-confidential/public clients. For this kind of clients the rfc8252 defines: 
+
+[quote, rfc8252]
+____
+Public native app clients *MUST* implement the Proof Key for Code Exchange (PKCE [RFC7636]) extension to OAuth, and authorization servers MUST support PKCE for such clients, for the reasons detailed in Section 8.1.
+____
+
+Public clients are vulnerable to man-in-the-middle attacks. link:https://tools.ietf.org/html/rfc7636[PKCE] adds a proof to make sure only the clients creating the authorization request is able to create a valid token request. See link:https://tools.ietf.org/html/rfc7636[PKCE] or the additional lab link:oauth2-security.adoc:[OAuth 2.0 Security] for more details. 
+
+Keycloak is supporting PKCE. 
+
+=== Browsers
+
+The recommended way is to use external browsers or "in-app browser tabs":
+
+[quote, rfc8252]
+____
+An external user-agent designed specifically for user authorization and capable of processing authorization requests and responses like a browser MAY also be used.Other external user-agents, such as a native app provided by the authorization server may meet the criteria set out in this best practice, including using the same redirection URI properties, but their use is out of scope for this specification.
+
+Some platforms support a browser feature known as "in-app browsertabs", where an app can present a tab of the browser within the app context without switching apps, but still retain key benefits of the browser such as a shared authentication state and security context.On platforms where they are supported, it is RECOMMENDED, for usability reasons, that apps use in-app browser tabs for the authorization request.
+____
+
+[HINT]
+====
+Next a better security the usage of external (system) browsers enables single Sign-on for users of native applications.
+====
+
+=== Redirection Schemes
+
+The following schemes must be offered by a rfc8252 compatible authorization server:
+
+. Private-Use URI Scheme Redirection
++
+[quote, rfc8252]
+____
+For example, an app that controls the domain name "app.example.com"can use "com.example.app" as their scheme. Some authorization servers assign client identifiers based on domain names, for example,"client1234.usercontent.example.net", which can also be used as the domain name for the scheme when reversed in the same manner.  A scheme such as "myapp", however, would not meet this requirement, as it is not based on a domain name.
+____
+. Claimed "https" Scheme URI Redirection 
++
+[quote, rfc8252]
+____
+Some operating systems allow apps to claim "https" scheme [RFC7230] URIs in the domains they control.  When the browser encounters a claimed URI, instead of the page being loaded in the browser, the native app is launched with the URI supplied as a launch parameter.
+
+...
+
+App-claimed "https" scheme redirect URIs have some advantages compared to other native app redirect options in that the identity of the destination app is guaranteed to the authorization server by the operating system. For this reason, *native apps SHOULD use them over the other options where possible*.
+____
+. Loopback Interface Redirection
++
+[quote, rfc8252]
+____
+Native apps that are able to open a port on the loopback network interface without needing special permissions (typically, those on desktop operating systems) can use the loopback interface to receive the OAuth redirect.
+
+That is, "http://127.0.0.1:{port}/{path}" for IPv4, and "http://[::1]:{port}/{path}" for IPv6.
+____
+
+== Available Keycloak Adapters
+
+Keycloaks supports currently the following adapters:
+
+* link:https://www.keycloak.org/docs/latest/securing_apps/#_installed_adapter[CLI / Desktop Applications]
+* link:https://www.keycloak.org/docs/latest/securing_apps/#hybrid-apps-with-cordova[Hybrid Applications with Cordova]
+* link:https://www.keycloak.org/docs/latest/securing_apps/#android[Android using AppAuth or AeroGear]
+* link:https://www.keycloak.org/docs/latest/securing_apps/#ios[iOS using AppAuth or AeroGear]

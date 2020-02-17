@@ -32,14 +32,14 @@ Host: server.example.com
 The generated URL contains the following parameters:
 
 * `/auth`, OAuth 2.0 Endpoint used for authentication of the User (Resource Owner).
-* `response_type`: Defines that the response should contains an _Authorization Code_ (and not an _Access Token_).
-* `client_id`: The public identification of the Client. Must be registered in previously Keyloak and must be unique per Realm.
+* `response_type`: Defines that the response should contain an _Authorization Code_ (and not an _Access Token_).
+* `client_id`: The public identification of the Client. Must be registered previously in Keyloak and must be unique per Realm.
 * `redirect_uri`: The URL to which Keycloak should redirect the User Agent after the authentication of the Resource Owner. This parameter is optional.
 * `state`: Random String which can be used by the Client to match request and callback from Keycloak. Also used to prevent Cross-site request forgery attacks. 
 * `scope`: Scopes which the Client request access to. If OIDC is used the Scope must contain `openid`. Optional parameter.
 ====
 . The user provides its credentials through the login form
-. The user is redirected back to the application and the issued Authorization Code is provided as a parameter in the callback URL.
+. The user is redirected back to the application and the issued Authorization Code is included as a parameter in the callback URL.
 +
 [source,http]
 ----

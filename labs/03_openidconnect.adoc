@@ -11,7 +11,7 @@ OpenID Connect consists of a list of separate specifications which are listed on
 
 == Abstract protocol
 
-OpenID Connect is an extension for OAuth 2.0 an implements authentication. Clients may use this extension by requesting the `openid` scope value in the Authorization Request. Information about the authentication performed is returned in a _JSON Web Token (JWT)_ called an _ID Token_. OAuth 2.0 Authentication Servers implementing OpenID Connect are also referred to as _OpenID Providers (OPs)_. OAuth 2.0 Clients using OpenID Connect are also referred to as _Relying Parties (RPs)_.
+OpenID Connect is an extension for OAuth 2.0 and implements authentication. Clients may use this extension by requesting the `openid` scope value in the Authorization Request. Information about the authentication performed is returned in a _JSON Web Token (JWT)_ called an _ID Token_. OAuth 2.0 Authentication Servers implementing OpenID Connect are also referred to as _OpenID Providers (OPs)_. OAuth 2.0 Clients using OpenID Connect are also referred to as _Relying Parties (RPs)_.
 
 . The _Relying Party (RP)_ -- requiring End-User Authentication and Claims from an OpenID Provider -- sends a request to the _OpenID Provider (OP)_
 . The OP authenticates the End-User and obtains authorization.
@@ -116,7 +116,7 @@ The response may also return the `email` and `profile` scopes. They appear becau
 Keycloak does not include claims for non existing data. Just add or delete a email for the user `nerd` and you will get it within your ID token or not.
 ////
 
-As already mentioned in a previous lap Keycloak offers (as specified link:https://openid.net/specs/openid-connect-discovery-1_0.html[here]) an `.well-known` endpoint at http://keycloak:8180/auth/realms/techlab/.well-known/openid-configuration.
+As already mentioned in a previous lab Keycloak offers (as specified link:https://openid.net/specs/openid-connect-discovery-1_0.html[here]) an `.well-known` endpoint at http://keycloak:8180/auth/realms/techlab/.well-known/openid-configuration.
 
 OpenID connect specifies a link:https://openid.net/specs/openid-connect-core-1_0.html#UserInfo[_Userinfo_ endpoint] to get claims about the authenticated End-User using a token. Try to implement a cURL request to the right endpoint using one of the tokens form the previous tasks.
 

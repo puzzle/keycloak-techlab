@@ -12,7 +12,7 @@ ____
 
 
 == An example use-case for OAuth 2.0
-A User want to design a new photo book in a webbased photo book design application. His pictures are all stored in the cloud on a storage provider (like e.g. google or facebook). The user grants the design application access to his pictures which are stored within the cloud.
+A user wants to design a new photo book in a webbased photo book design application. His pictures are all stored in the cloud on a storage provider (like e.g. google or facebook). The user grants the design application access to his pictures which are stored within the cloud.
 
 With a classical Client-Server Authentication model the User needs to provide his username and password to the design application to grant access to his pictures within the cloud. This approach brings some *critical issues*:
 
@@ -30,7 +30,7 @@ OAuth 2.0 defines four roles which are explained in the following subchapters.
 === Resource Owner
 An entity capable of granting access to a protected resource. When the _Resource Owner_ is a person, it is referred to as an end-user. Often the _Resource Owner_ is a person which manually grants access to protected resources.
 
-For the example above the user which want to create an photo book represents the _Resourcen Owner_.
+For the example above the user which wants to create a photo book represents the _Resource Owner_.
 
 === Client
 An application making requests to a protected resource on behalf of the resource owner and with its authorization. 
@@ -46,7 +46,7 @@ In the example above the design application would be the the _Client_.
 ====
 With OAuth 2.0, Clients as well as End-Users can authenticate themselves. The prerequisite is that the Clients are able to handle the client secret confidentially. Confidential clients are named `confidential` and non-confidential clients are named `public`.
 
-If you create clients you specially have to ask yourself the following questions:
+When adding clients you have to ask yourself the following questions in particular:
 
 * Can my client keep information confidential (is he trustworthy)? A javascript or mobile application is usually not able to keep data confidential so the client will be of type public.
 * Is my application independent in terms of access logic, runtime (e.g. host) or lifecycle? Specially do not mix frontend and backend services at OAuth Client level if they are disconnected at the deployment level.
@@ -118,7 +118,7 @@ There is a out-of-band trust between _authorization server_ and _resource server
 
 
 == Scopes
-OAuth 2.0 defines the mechanism of Scoping. A Client can optionally requests one or more Scopes in the Authorization Request to which it wants to access data from. 
+OAuth 2.0 defines the mechanism of Scoping. A Client can optionally request one or more Scopes in the Authorization Request to which it wants to access data from.
 
 The Resource Owner has to grant explicitly access to all requested Scopes. You certainly have already seen consent dialogs of kind "_Fancy Application wants to access your contact list, your phone number and your birthday._" These three requests are corresponding to three different Scopes in the OAuth 2.0 context.
 
@@ -127,7 +127,7 @@ Granted scopes will be contained in the issued Access Token. Scopes are defined 
 
 [TIP]
 ====
-Have a look at the available https://developer.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/[Scopes for a GitHub User Profile]. The Client application can precise define which information of the User profile he wants to request.
+Have a look at the available https://developer.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/[Scopes for a GitHub User Profile]. The Client application can precisely define which information of the User Profile he wants to request.
 ====
 
 

@@ -1,6 +1,6 @@
 = Keycloak
 
-link:https://www.keycloak.org/[Keycloak] is a _Open Source Identity and Access Management_ and is the upstream project of link:https://access.redhat.com/products/red-hat-single-sign-on[RedHat SSO]. The sources are hosted on https://github.com/keycloak/keycloak[GitHub]. It's main goal: Make applications secure in a non-invasive way.
+link:https://www.keycloak.org/[Keycloak] is a _Open Source Identity and Access Management_ and is the upstream project of link:https://access.redhat.com/products/red-hat-single-sign-on[RedHat SSO]. The sources are hosted on https://github.com/keycloak/keycloak[GitHub]. Its main goal: Make applications secure in a non-invasive way.
 
 image::https://www.keycloak.org/resources/images/keycloak_logo_480x108.png[]
 
@@ -14,16 +14,16 @@ Keycloak is actively maintained (especially by red hat engineers) and offers amo
 * Multitenancy
 * Customize look and feel
 
-A more complete List with Keycloak features can be found https://www.keycloak.org/docs/latest/server_admin/index.html#features[here].
+A more complete list with Keycloak features can be found https://www.keycloak.org/docs/latest/server_admin/index.html#features[here].
 
 [NOTE]
 ====
-Some technical Facts about Keycloak:
+Some technical facts about Keycloak:
 
 * Keycloak is built on top of WildFly application server, uses internally the provided frameworks like Infinispan and Hibernate.
-* It runs in a Java Virtual Machine and is based on Java EE
-* Keycloak can be run on any Operating System which runs a JVM.
-* As persistence layer a Database us used. Any Database with a JDBC driver can be used. Keycloak often is operated with PostgreSQL, MySQL or Oracle.
+* It runs on a Java Virtual Machine and is based on Java EE
+* Keycloak can be run on any operating system which runs a JVM.
+* As persistence layer a database us used. Any database with a JDBC driver can be used. Keycloak often is operated with PostgreSQL, MySQL or Oracle.
 * The minimal system requirements to run Keycloak are in listed in the https://www.keycloak.org/docs/7.0/server_installation/#system-requirements[Installation Manual].
 ====
 

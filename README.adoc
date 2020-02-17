@@ -11,7 +11,7 @@ This Techlab contains exercises and solutions. The solutions are partially integ
 == Agenda & slides
 
 * link:/agenda.adoc[Agenda]
-* link:/slides/README.md[Slides]
+* link:/slides/README.adoc[Slides]
 
 == Contents
 

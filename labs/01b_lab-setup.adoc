@@ -30,7 +30,7 @@ This will start a Keycloak instance using a PostgreSQL database as persistence a
 Since we are using Docker-Compose and Volumes all data will remain persisted even after stopping and recreating the containers.
 ====
 
-In the following Labs we will communicate with Keycloak both from our local browser installed in the host OS and as well from deployed applications sitting in other containers. In order to always work with the same hostname and port (`keycloak:8180`) from the host OS as also from within inside a container, it is mandatory to create a entry in your local `/etc/hosts` file:
+In the following labs we will communicate with Keycloak both from our local browser installed in the host OS and as well from deployed applications sitting in other containers. In order to always work with the same hostname and port (`keycloak:8180`) from the host OS as also from within inside a container, it is mandatory to create a entry in your local `/etc/hosts` file:
 
 [source,sh]
 ----
@@ -63,10 +63,10 @@ You will find the button `Add realm` on the top left by moving the mouse over Ma
 
 [CAUTION]
 ====
-The default Realm is `master`. Keycloak uses this for basic functionality, so you should have good reasons to *not* edit or even delete this realm. It's always a good idea to create a new realm even for testing purposes.
+The default Realm is `master`. Keycloak uses this for basic functionality, so you should have *very good reasons when working with this realm*. It is safer to create a new realm even for testing purposes.
 ====
 
-Additionally, we want to enable traceability and auditing in our freshly created realm. In Keycloak thats simply called `Events`. 
+Additionally, we want to enable traceability and auditing in our freshly created realm. In Keycloak thats simply called `Events`.
 
     Events -> Config -> Enable Save Events for Login Events and Admin Events -> Save
 

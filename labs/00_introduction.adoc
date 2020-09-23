@@ -73,14 +73,14 @@ And then, there's CBAC, which is just Microsoft's standard, the idea is still At
 
 Now, we come to the most complex, but the most powerful collection of "things we know." RAdAC looks at who you are, what you're allowed to do, if you have the other requirements to allow you to do it, and, most importantly, if there are any other things going on in the world that might prevent you from doing it.
 
-For example, we are trying to keep our nightclub healthy. We get a list of countries that have outbreaks of Spanish flu (stick with me here...). A person who visited one of those countries might have been exposed to the flu, and is, therefore, has a higher risk of making our other customers sick.
+For example, we are trying to keep our nightclub healthy. Health agencies distribute a list of countries that suffer current outbreaks of a lethal kind of flu. A person who visited one of those countries might be contagious, and therefore presents a high risk to spread the disease among other customers.
 
 [TIP]
 ====
 * *ACL* -- Your name is on the list
 * *RBAC* -- You have a pink wristband
 * *ABAC* -- You're the right age
-* *RAdAC* -- You haven't been to a country with Spanish Flu
+* *RAdAC* -- You haven't travelled a high-risk country
 ====
 
 == Self-service and integration

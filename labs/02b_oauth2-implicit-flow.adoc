@@ -26,7 +26,7 @@ There is a more abstract and theoretical flow explanation in the link:https://to
 
 == Lab
 
-The JavaScript application used by this lab is already provided by the Docker Compose of the techlab-setup. Goto your local Keycloak Administration Console at http://keycloak:8180/auth/ and login with User `admin` and Password `password`
+The JavaScript application used by this lab is already provided by the Docker Compose of the techlab-setup. Go to your local Keycloak Administration Console at http://keycloak:8180/auth/ and login with User `admin` and Password `password`
 
 
 == Create a new Client

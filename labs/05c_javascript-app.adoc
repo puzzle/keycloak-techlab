@@ -13,7 +13,7 @@ We start by creating the client definitions. Create a new client named `lab-js-a
 Create a new client `lab-js-app` with _Access Type_ `authorization code` and correct redirect and web origin url -->
 ////
 
-In your Keycloak client definition goto the _Installation_ tab, select `Keycloak OIDC JSON` as format and download your client configuration.
+In your Keycloak client definition go to the _Installation_ tab, select `Keycloak OIDC JSON` as format and download your client configuration.
 
 Move this to your project:
 
@@ -22,7 +22,7 @@ Move this to your project:
 mv ~/downloads/keycloak.json ../keycloak-quickstarts/app-jee-html5/config
 ----
 
-Within the file in your Keycloak client definition goto the _Installation_ tab, select `Keycloak OIDC JSON` as format and download your client configuration.
+Within the file in your Keycloak client definition go to the _Installation_ tab, select `Keycloak OIDC JSON` as format and download your client configuration.
 
 Take a look into the source and specially the file `src/main/webapp/app.js`. Try to understand how Keycloak functionality is integrated.
 

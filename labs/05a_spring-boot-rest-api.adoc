@@ -105,11 +105,12 @@ Try to get a access token as enviroment variable using cURL for the `techlab-cli
 
 [source,sh]
 ----
-export access_token=$(\
-   curl -X POST <??the correct endpoint regarding to the protocol flow??> \
-   -H 'Authorization: Basic <??client authentication if used as base64 encoded value??>' \
-   -H 'content-type: application/x-www-form-urlencoded' \
-   -d 'username=nerd&password=quirky&grant_type=<??grant type??>' | jq --raw-output '.access_token' \
+export access_token=$( \
+    curl -X POST <??the correct endpoint regarding to the protocol flow??> \
+    -H 'Authorization: Basic <??client authentication if used as base64 encoded value??>' \
+    -H 'content-type: application/x-www-form-urlencoded' \
+    -d 'username=nerd&password=quirky&grant_type=<??grant type??>' | \
+    jq --raw-output '.access_token' \
 )
 ----
 

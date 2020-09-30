@@ -124,7 +124,8 @@ To demonstrate quickly the Authorization Code Flow we need a local web-applicati
 
 Create a new public Client `techlab-cli`
 
-    Clients -> Create -> Client ID: techlab-cli -> Save
+[subs="+replacements,quotes"]
+    Clients -> Create -> Client ID: *techlab-cli* -> Save
 
 Enable all Flows and configure Redirect-URI for Client `techlab-cli`:
 

@@ -1,3 +1,5 @@
+:experimental:
+
 = OAuth 2.0 - Implicit Flow
 
 The _Implicit Flow_ is defined in the link:https://tools.ietf.org/html/rfc6749#section-4.2[rfc6749] as follows:
@@ -26,7 +28,7 @@ There is a more abstract and theoretical flow explanation in the link:https://to
 
 == Lab
 
-The JavaScript application used by this lab is already provided by the Docker Compose of the techlab-setup. Goto your local Keycloak Administration Console at http://keycloak:8180/auth/ and login with User `admin` and Password `password`
+The JavaScript application used by this lab is already provided by the Docker Compose of the techlab-setup. Go to your local Keycloak Administration Console at http://keycloak:8180/auth/ and login with User `admin` and Password `password`
 
 
 == Create a new Client
@@ -41,7 +43,7 @@ Configuring `Web Origins` for this Client to `*`.
 
 And open the js-console at http://localhost:8082/js-console/.
 
-Open Developer Tools of browser ([F12]) and make sure to log all requests.
+Open Developer Tools of browser kbd:[*F12*] and make sure to log all requests.
 
 In the app click "Login" and enter credentials: User `nerd` and password `quirky`.
 

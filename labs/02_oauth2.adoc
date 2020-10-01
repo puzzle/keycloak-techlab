@@ -16,9 +16,9 @@ A user wants to design a new photo book in a webbased photo book design applicat
 
 With a classical Client-Server Authentication model the User needs to provide his username and password to the design application to grant access to his pictures within the cloud. This approach brings some *critical issues*:
 
-* The *credentials are shared with a possible insecure application*. Even if the application is not an evil one, the user can't trust the design app to store his credentials securely.
-* The photo book app got *full access* to the users store. But it only needs access to exactly one service (directory) which provides the pictures used for this album.
-* It is impossible to *revoke access* of only one single third party application. Imagine the user has provided his credentials for an online printing service before as well. Because he has to change his credentials, he can't revoke access for just this printing service but not for the photo book app.
+* The *credentials are shared with a possible insecure application*. Even if the application is not inherently evil, the user can't trust the design app to store his credentials securely.
+* The photo book app got *full access* to the user's store. But it only needs access to exactly one service (directory) which provides the pictures used for this album.
+* It is impossible to *revoke access* from a single third party application. Assuming the user also provided the credentials to an online printing service and a credential change is imminent. Revoking access only from the printing service but leave the photo book app unscathed is unachievable.
 
 This is where OAuth 2.0 jumps in to resolve this issues: It's all about access delegation.
 
@@ -48,7 +48,7 @@ With OAuth 2.0, Clients as well as End-Users can authenticate themselves. The pr
 
 When adding clients you have to ask yourself the following questions in particular:
 
-* Can my client keep information confidential (is he trustworthy)? A javascript or mobile application is usually not able to keep data confidential so the client will be of type public.
+* Can my client keep information confidential (is he trustworthy)? A javascript or mobile application is usually not able to keep data confidential so the client is of type public.
 * Is my application independent in terms of access logic, runtime (e.g. host) or lifecycle? Specially do not mix frontend and backend services at OAuth Client level if they are disconnected at the deployment level.
 ====
 
@@ -102,17 +102,18 @@ The *Redirection endpoint* is on the client-side and used by the _Authorization 
 The abstract OAuth 2.0 flow illustrated describes the interaction between
 the four roles and includes the following steps:
 
-* *(A)* -- The client requests authorization from the resource owner. The authorization request can be made directly to the resource owner (as shown), or preferably indirectly via the authorization server as an intermediary.
+[upperalpha]
+A. The client requests authorization from the resource owner. The authorization request can be made directly to the resource owner (as shown), or preferably indirectly via the authorization server as an intermediary.
 
-* *(B)* -- The client receives an authorization grant, which is a credential representing the resource owner's authorization, expressed using one of four grant types defined in this specification or using an extension grant type.  The authorization grant type depends on the method used by the client to request authorization and the types supported by the authorization server.
+B. The client receives an authorization grant, which is a credential representing the resource owner's authorization, expressed using one of four grant types defined in this specification or using an extension grant type.  The authorization grant type depends on the method used by the client to request authorization and the types supported by the authorization server.
 
-* *\(C)* -- The client requests an access token by authenticating with the authorization server and presenting the authorization grant.
+C. The client requests an access token by authenticating with the authorization server and presenting the authorization grant.
 
-* *(D)* -- The authorization server authenticates the client and validates the authorization grant, and if valid, issues an access token.
+D. The authorization server authenticates the client and validates the authorization grant, and if valid, issues an access token.
 
-* *(E)* -- The client requests the protected resource from the resource server and authenticates by presenting the access token.
+E. The client requests the protected resource from the resource server and authenticates by presenting the access token.
 
-* *(F)* -- The resource server validates the access token, and if valid, serves the request.
+F. The resource server validates the access token, and if valid, serves the request.
 
 There is a out-of-band trust between _authorization server_ and _resource server_.
 

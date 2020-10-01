@@ -1,3 +1,5 @@
+:experimental:
+
 = OAuth 2.0 - Authorization Code Flow
 
 == Introduction
@@ -122,7 +124,8 @@ To demonstrate quickly the Authorization Code Flow we need a local web-applicati
 
 Create a new public Client `techlab-cli`
 
-    Clients -> Create -> Client ID: techlab-cli -> Save
+[subs="+replacements,quotes"]
+    Clients -> Create -> Client ID: *techlab-cli* -> Save
 
 Enable all Flows and configure Redirect-URI for Client `techlab-cli`:
 
@@ -145,7 +148,7 @@ How exactly the Client Registration works is not covered by the OAuth 2.0 specif
 
 === Open the Client Application and follow the Flow
 
-Open Development Tools of your favourite browser and capture the HTTP traffic with the development tools (F12).
+Open Development Tools of your favourite browser and capture the HTTP traffic with the development tools kbd:[*F12*].
 
 Open the protected url http://localhost:3001/techlab-service/secured. You will be redirected to a login form provided by Keycloak.
 

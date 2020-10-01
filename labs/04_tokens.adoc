@@ -184,9 +184,11 @@ Try to implement a token introspection for the following token:
 [source,sh]
 ----
 export access_token=$( \
-curl -s -X POST http://keycloak:8180/auth/realms/techlab/protocol/openid-connect/token \
+    curl -s -X POST http://keycloak:8180/auth/realms/techlab/protocol/openid-connect/token \
     -H "content-type: application/x-www-form-urlencoded" \
-    -d "client_id=techlab-cli&username=nerd&password=quirky&grant_type=password&scope=openid" | jq --raw-output '.access_token')
+    -d "client_id=techlab-cli&username=nerd&password=quirky&grant_type=password&scope=openid" | \
+    jq --raw-output '.access_token' \
+)
 ----
 
 ////

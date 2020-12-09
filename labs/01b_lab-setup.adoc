@@ -2,7 +2,7 @@
 
 This chapter describes how to setup a local Keycloak environment based on the prebuilt Docker Images. All Labs of this Techlab are based on this environment, the Realms, Users and Clients created in the following chapters.
 
-=== Prerequisites
+== Prerequisites
 
 The following tools need to be installed on the machine used for this Techlab:
 
@@ -13,7 +13,7 @@ The following tools need to be installed on the machine used for this Techlab:
 - link:https://openjdk.java.net[Java 1.8+]
 - link:https://maven.apache.org/install.html[Apache Maven 3.5+]
 
-=== Clone and start Keycloak environment
+== Clone and start Keycloak environment
 
 Clone Repository and start with docker-compose
 

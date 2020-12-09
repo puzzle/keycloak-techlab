@@ -79,6 +79,8 @@ The *Redirection endpoint* is on the client-side and used by the _Authorization 
 == Abstract Protocol Flow
 
 .Abstract OAuth 2.0 Protocol Flow of rfc6479
+ifndef::env-github[]
+[ditaa, "../images/oauth-2.0-protocol-flow", svg]
 ----
 +--------+                               +---------------+
 |        |--(A)- Authorization Request ->|   Resource    |
@@ -98,6 +100,10 @@ The *Redirection endpoint* is on the client-side and used by the _Authorization 
 |        |<-(F)--- Protected Resource ---|               |
 +--------+                               +---------------+
 ----
+endif::env-github[]
+ifdef::env-github[]
+image::../images/oauth-2.0-protocol-flow.svg[]
+endif::env-github[]
 
 The abstract OAuth 2.0 flow illustrated describes the interaction between
 the four roles and includes the following steps:

@@ -19,7 +19,9 @@ OpenID Connect is an extension for OAuth 2.0 and implements authentication. Clie
 . The RP can send a request with the Access Token to the UserInfo Endpoint.
 . The UserInfo Endpoint returns Claims about the End-User.
 
-```
+ifndef::env-github[]
+[ditaa, "../images/openid-connect-flow", svg]
+----
 +--------+                                   +--------+
 |        |                                   |        |
 |        |---------(1) AuthN Request-------->|        |
@@ -38,7 +40,11 @@ OpenID Connect is an extension for OAuth 2.0 and implements authentication. Clie
 |        |<--------(5) UserInfo Response-----|        |
 |        |                                   |        |
 +--------+                                   +--------+
-```
+----
+endif::env-github[]
+ifdef::env-github[]
+image::../images/openid-connect-flow.svg[]
+endif::env-github[]
 
 == Flow
 

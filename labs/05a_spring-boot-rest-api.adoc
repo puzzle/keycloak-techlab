@@ -6,18 +6,20 @@ To make it short: The Spring examples of Keycloak are still a bit flawed. We wil
 
 In this lab we are going to create a restful _Resource Server_ and requesting it's resources using `cURL` as _Client_. The credentials of _Resource Owner_ `Nerd` will be used in combination with the _Resource Owner Credentials_ Flow to obtain a valid token.
 
+ifndef::env-github[]
+[ditaa, "../images/springboot-rest-flow", svg]
 ----
           +---------------------+
           |                     |
           | Resource Owner:Nerd |
           |                     |
-          +---------------------+
-                                                   +----------------------+
-                     +               +------------>+                      |
+          +----------+----------+
+                     |                             +----------------------+
+                     |               +------------>+                      |
                      | Credentials   |             | Auth Server:Keycloak |
-                     v               | Token       |                      |
-                                     v             +----------------------+
-+------------------------------------+--+
+                     |               | Token       |                      |
+                     v               v             +----------------------+
++--------------------+---------------+--+
 |                                       |
 | Client(cURL):techlab+cli+confidential |
 |                                       |
@@ -28,6 +30,10 @@ In this lab we are going to create a restful _Resource Server_ and requesting it
                                      +------------>+                                     |
                                                    +-------------------------------------+
 ----
+endif::env-github[]
+ifdef::env-github[]
+image::../images/springboot-rest-flow.svg[]
+endif::env-github[]
 
 For this lab it's a good idea to start with the client definition for Keycloak. So open your link:http://keycloak:8180[Administration Console] and create a new client named `lab-spring-rest-api`. You have learned the basics of what important settings an *API client* needs in the previous theoretical labs (type of flows/grant, type of clients etc.). For a REST API we are going to use a special client type called `bearer-only`. This is a Keycloak specific client.
 

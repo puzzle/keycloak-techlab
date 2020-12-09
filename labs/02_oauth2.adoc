@@ -12,7 +12,7 @@ ____
 
 
 == An example use-case for OAuth 2.0
-A user wants to design a new photo book in a webbased photo book design application. His pictures are all stored in the cloud on a storage provider (like e.g. google or facebook). The user grants the design application access to his pictures which are stored within the cloud.
+A user wants to design a new photo book in a web-based photo book design application. His pictures are all stored in the cloud on a storage provider (like e.g. google or facebook). The user grants the design application access to his pictures which are stored within the cloud.
 
 With a classical Client-Server Authentication model the User needs to provide his username and password to the design application to grant access to his pictures within the cloud. This approach brings some *critical issues*:
 
@@ -40,7 +40,7 @@ An application making requests to a protected resource on behalf of the resource
 The term "client" does not imply any particular implementation characteristics (e.g., whether the application executes on a server, a desktop, or other devices).
 ====
 
-In the example above the design application would be the the _Client_.
+In the example above the design application would be the _Client_.
 
 [NOTE]
 ====
@@ -54,7 +54,7 @@ When adding clients you have to ask yourself the following questions in particul
 
 
 === Resource Server
-This is a server hosting the protected resources. The _Resource Server_ acts as policy enforment point and will validate the Access Tokens the Clients submits with every requests.
+This is a server hosting the protected resources. The _Resource Server_ acts as policy enforcement point and will validate the Access Tokens the Clients submits with every requests.
 
 In the example above the cloud storage provider would be the _Resource Server_.
 
@@ -121,7 +121,7 @@ There is a out-of-band trust between _authorization server_ and _resource server
 == Scopes
 OAuth 2.0 defines the mechanism of Scoping. A Client can optionally request one or more Scopes in the Authorization Request to which it wants to access data from.
 
-The Resource Owner has to grant explicitly access to all requested Scopes. You certainly have already seen consent dialogs of kind "_Fancy Application wants to access your contact list, your phone number and your birthday._" These three requests are corresponding to three different Scopes in the OAuth 2.0 context.
+The Resource Owner has to grant explicitly access to all requested Scopes. You most likely have already encountered consent dialogs stating "_Fancy Application wants to access your contact list, your phone number and your birthday._". These three requests are corresponding to three different Scopes in the OAuth 2.0 context.
 
 Granted scopes will be contained in the issued Access Token. Scopes are defined in link:https://tools.ietf.org/html/rfc6749#section-3.3[section 3 of the rfc6749].
 

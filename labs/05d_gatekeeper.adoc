@@ -17,7 +17,7 @@ For this lab we use link:https://hub.docker.com/r/kennethreitz/httpbin/[httpbin]
                            v             +----------------------+
 +--------------------------+--+
 |                             |
-| Client(cUrl):lab-gatekeeper |
+| Client(cURL):lab-gatekeeper |
 |                             |
 +-------------+---------------+
               |

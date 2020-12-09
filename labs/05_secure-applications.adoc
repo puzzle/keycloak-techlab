@@ -39,7 +39,7 @@ The docker compose file prepared for this techlab includes already a dedicated W
 
 Know we will create our own application landscape that uses Keycloak to secure the several parts. Our landscape will consist of:
 
-* a link:./05a_spring-boot-rest-api.adoc[Spring Boot based restful API] to show some specialities of Spring Framework
+* a link:./05a_spring-boot-rest-api.adoc[Spring Boot based restful API] to show some specialties of Spring Framework
 * a link:./05b_jee-rest-api.adoc[JEE based restful API] secured with Wildfly Keycloak Adapter
 * a link:./05c_javascript-app.adoc[browser application] implemented using html5 and based on keycloak.js
 * a simulated link:./05d_gatekeeper.adoc[standard application] using Gatekeeper to authenticate and authorize access

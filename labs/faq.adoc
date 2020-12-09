@@ -2,11 +2,11 @@
 
 == What is the benefit of _Authorization Code_ vs. _Implicit_ Flow?
 
-OAuth 2.0 allows to use a non secured redirect url (no TLS). That allows specially developers to use non secured endpoints during implementation of applications. To use non secured endpoints and a protocol that covers this use case properly is probably better than insecure development server (self-signed, missconfigured etc.).
+OAuth 2.0 allows to use a non secured redirect URL (no TLS). That allows specially developers to use non secured endpoints during implementation of applications. To use non secured endpoints and a protocol that covers this use case properly is probably better than insecure development server (self-signed, miss configured etc.).
 
-The implicit flow is only secure using a browser application. The access token is passed as part of the fragment in the redirect url to the user agent and will so never reach the redirect endpoint (because fragments are not forwarded by the user agent). This avoids a possible MITM attack to an insecure redirect endpoint. This has the caveat of only being possible client side and needs javascript running client side to use the access token.
+The implicit flow is only secure using a browser application. The access token is passed as part of the fragment in the redirect URL to the user agent and will so never reach the redirect endpoint (because fragments are not forwarded by the user agent). This avoids a possible MITM attack to an insecure redirect endpoint. This has the caveat of only being possible client side and needs javascript running client side to use the access token.
 
-The authorization code flow does not pass the access token directly in a URL parameter because URL parameters are part of the HTTP Request, therefore any intermediary server/routers by which your request would pass could be able to read the access token if you are not using a secured endpoint. This is why an intermediary one-time-use "authorization code" is provided that only the legitimate receiver will be able to exchange (if you use confidential clients!) and that the code will be useless to potential hackers intercepting the requests over insecured endpoints.
+The authorization code flow does not pass the access token directly in a URL parameter because URL parameters are part of the HTTP Request, therefore any intermediary server/routers by which your request would pass could be able to read the access token if you are not using a secured endpoint. This is why an intermediary one-time-use "authorization code" is provided that only the legitimate receiver will be able to exchange (if you use confidential clients!) and that the code will be useless to potential hackers intercepting the requests over insecure endpoints.
 
 Passing the access token directly in a URL param could in theory be possible but the auth sever would have to make sure the redirect URI is using HTTPS with TLS encryption and a 'trusted' SSL certificate (typically from a Certificate Authority that is not free) to be sure that the destination server is legitimate and that the HTTP request is fully encrypted.
 
@@ -20,7 +20,7 @@ Further information and sources:
 
 Using the _implicit flow_ the authorization server send a redirect to the user agents with the token in the URI fragment. The user agents does follow this redirect but the final call to the redirect endpoint does not include the fragment (https://tools.ietf.org/html/rfc2616). So the user-agent retains the fragment information locally only.
 
-This is important because the redirect url may not be secured by TLS. And so it is not save to send the access token to the redirect endpoint.
+This is important because the redirect URL may not be secured by TLS. And so it is not save to send the access token to the redirect endpoint.
 
 In comparison with the authorization code flow, the code is used for only one time to generate token and client authentication is required (client ID and client secret). So it is secured as the client password is not shared and just client know it.
 
@@ -39,7 +39,7 @@ Token:
 * Special protocols needed (e.g. OAuth)
 * Fine granular access to an API (e.g. Scopes)
 * Shareable
-* Protocolls like OAuth has protection against MITM attacks
+* Protocols like OAuth has protection against MITM attacks
 * End-User friendly
 
 Further information and sources: 

@@ -22,7 +22,7 @@ A credential is provided to the authentication process by a user or an applicati
 
 * *Something you know*: A secret or a PIN
 * *Something you have*: Smart card or token
-* *Something you are*: Facial Recognition, Biometrics
+* *Something you are*: Facial recognition, biometrics
 
 Multi-factor authentication requires at least two of the methods mentioned above.
 

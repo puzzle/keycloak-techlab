@@ -35,7 +35,7 @@ The generated URL contains the following parameters:
 
 * `/auth`, OAuth 2.0 Endpoint used for authentication of the User (Resource Owner).
 * `response_type`: Defines that the response should contain an _Authorization Code_ (and not an _Access Token_).
-* `client_id`: The public identification of the Client. Must be registered previously in Keyloak and must be unique per Realm.
+* `client_id`: The public identification of the Client. Must be registered previously in Keycloak and must be unique per Realm.
 * `redirect_uri`: The URL to which Keycloak should redirect the User Agent after the authentication of the Resource Owner. This parameter is optional.
 * `state`: Random String which can be used by the Client to match request and callback from Keycloak. Also used to prevent Cross-site request forgery attacks. 
 * `scope`: Scopes which the Client request access to. If OIDC is used the Scope must contain `openid`. Optional parameter.
@@ -73,7 +73,7 @@ grant_type=authorization_code&code=SplxlOBeZQQYbYS6WxSbI&redirect_uri=https%3A%2
 [NOTE]
 ====
 * `/token`, OAuth 2.0 Endpoint used issuing Access and Refresh Tokens.
-* `Authorization: Basic`: Authentication of the Client (backend of the web application) itself as a HTTP Basic auth.
+* `Authorization: Basic`: Authentication of the Client (backend of the web application) itself as a HTTP Basic-Auth.
 * `grant_type=authorization_code`: Defines that the provided code is a Authorization Code which should be exchanged against an Access Token.
 * `code`: The Authorization Code.
 * `redirect_uri`: Used in this request only for validation. The Authorization Server verifies, that the redirect URI matches the URI the User Agent was redirected in the response containing the Authorization Code.
@@ -150,7 +150,7 @@ How exactly the Client Registration works is not covered by the OAuth 2.0 specif
 
 Open Development Tools of your favourite browser and capture the HTTP traffic with the development tools kbd:[*F12*].
 
-Open the protected url http://localhost:3001/techlab-service/secured. You will be redirected to a login form provided by Keycloak.
+Open the protected URL http://localhost:3001/techlab-service/secured. You will be redirected to a login form provided by Keycloak.
 
 Try to understand the flow of requests and responses and assign
 
@@ -161,7 +161,7 @@ What did the NodeJS Application response to the HTTP GET Request to http://local
 
 Login with user `nerd` and password `quirky`.
 
-You will be redirected back to url http://localhost:3001/techlab-service/secured and see the response `{"message":"secured"}`.
+You will be redirected back to URL http://localhost:3001/techlab-service/secured and see the response `{"message":"secured"}`.
 The Authorization Code Flow successfully worked and the User `nerd` has been authenticated and authorized by Keycloak.
 
 [TIP]

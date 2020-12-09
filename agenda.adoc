@@ -4,6 +4,6 @@
 * Keycloak and Lab Setup (20')
 * Introduction (10', optional)
 * OAuth 2.0 (120')
-* OpenID connect and Tokens (30')
+* OpenID Connect and Tokens (30')
 * Lunch
 * Hands-on Labs

@@ -31,7 +31,7 @@ This Techlab contains exercises and solutions. The solutions are partially integ
 
    OAuth 2.0 incl. hands-on exercises.
 
-. link:/labs/03_openidconnect.adoc[OpenID connect]
+. link:/labs/03_openidconnect.adoc[OpenID Connect]
 
    OpenIdConnect incl. hands-on exercises.
 

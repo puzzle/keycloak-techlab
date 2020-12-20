@@ -53,7 +53,7 @@ ____
 Any party in possession of a bearer token (a "bearer") can use it to get access to the associated resources (without demonstrating possession of a cryptographic key). To prevent misuse, bearer tokens need to be protected from disclosure in storage and in transport.
 ____
 
-Thus, it is higly important that bearer access tokens be confidently in-transit as in-rest, and must be known only to the client, the Authorization Server, and the Protected Resource. Any client in possession of an access token can invoke the corresponding protected resources. So this is why the security of OAuth 2.0 (using bearer tokens) is largely based on the secure use of TLS.
+Thus, it is highly important that bearer access tokens be confidently in-transit as in-rest, and must be known only to the client, the Authorization Server, and the Protected Resource. Any client in possession of an access token can invoke the corresponding protected resources. So this is why the security of OAuth 2.0 (using bearer tokens) is largely based on the secure use of TLS.
 
 Bearer access tokens can be submitted by the client to the protected resource in three ways:
 
@@ -146,7 +146,7 @@ ____
 JSON Web Token (JWT) is a compact, URL-safe means of representing claims to be transferred between two parties. The claims in a JWT are encoded as a JSON object that is used as the payload of a JSON Web Signature (JWS) structure or as the plaintext of a JSON Web Encryption (JWE) structure, enabling the claims to be digitally signed or integrity protected with a Message Authentication Code (MAC) and/or encrypted.
 ____
 
-Thus JWT represent a form of self-contained tokens. OpenID connect specifies the required claims for it's JWT tokens. link:https://jwt.io/[JWT.io] is a reference implementation for this rfc7519 and allows you to decode, verify and generate JWT.
+Thus JWT represent a form of self-contained tokens. OpenID Connect specifies the required claims for it's JWT tokens. link:https://jwt.io/[JWT.io] is a reference implementation for this rfc7519 and allows you to decode, verify and generate JWT.
 
 [TIP]
 ====
@@ -174,7 +174,7 @@ There is a OAuth 2.0 extension for _token introspection_ in link:https://tools.i
 
 [cite,rfc7662]
 ____
-This specification defines a method for a protected resource to query an OAuth 2.0 authorization server to determine the active state of an OAuth 2.0 token and to determinemeta-information about this token. OAuth 2.0 deployments can use this method to conveyinformation about the authorization context of the token from the authorization server tothe protected resource.
+This specification defines a method for a protected resource to query an OAuth 2.0 authorization server to determine the active state of an OAuth 2.0 token and to determine meta-information about this token. OAuth 2.0 deployments can use this method to convey information about the authorization context of the token from the authorization server to the protected resource.
 ____
 
 This endpoint is specially useful for use cases, where it must be checked whether a token was not revoked.
@@ -199,7 +199,7 @@ curl -s -X POST http://keycloak:8180/auth/realms/techlab/protocol/openid-connect
 ////
 
 
-Go to Keycloaks http://keycloak:8180/auth/admin/master/console/#/realms/techlab/sessions/realm[View with Active Sessions] and invalidate all Sessions by clickint `Logout all`.
+Go to Keycloak's http://keycloak:8180/auth/admin/master/console/#/realms/techlab/sessions/realm[View with Active Sessions] and invalidate all Sessions by clicking `Logout all`.
 
 Verify the same Access Token again by Introspection Endpoint. The token should be no longer active.
 

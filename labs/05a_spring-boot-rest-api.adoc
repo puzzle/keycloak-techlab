@@ -4,7 +4,7 @@ This lab is based on `service-springboot-rest` of the link:https://github.com/ke
 
 To make it short: The Spring examples of Keycloak are still a bit flawed. We will have to adapt some things for which an IDE is practical. But you can do it a bit less comfortable without it.
 
-In this lab we are going to create a restful _Resource Server_ and requesting it's resources using `cUrl` as _Client_. The credentials of _Resource Owner_ `Nerd` will be used in combination with the _Resource Owner Credentials_ Flow to obtain a valid token.
+In this lab we are going to create a restful _Resource Server_ and requesting it's resources using `cURL` as _Client_. The credentials of _Resource Owner_ `Nerd` will be used in combination with the _Resource Owner Credentials_ Flow to obtain a valid token.
 
 ----
           +---------------------+
@@ -19,7 +19,7 @@ In this lab we are going to create a restful _Resource Server_ and requesting it
                                      v             +----------------------+
 +------------------------------------+--+
 |                                       |
-| Client(cUrl):techlab+cli+confidential |
+| Client(cURL):techlab+cli+confidential |
 |                                       |
 +------------------------------------+--+
                                      ^             +-------------------------------------+
@@ -101,7 +101,7 @@ Additionally it may be a good idea to update to the latest spring version. In th
 
 After successfully starting your spring boot application you should have a running and accessible endpoint at http://localhost:8081/public. The endpoint under http://localhost:8081/products is protected and returns a `401 Unauthorized` as it expects a User with the role `user` assigned.
 
-Try to get a access token as enviroment variable using cURL for the `techlab-cli-confidential` client and `nerd` user:
+Try to get a access token as environment variable using cURL for the `techlab-cli-confidential` client and `nerd` user:
 
 [source,sh]
 ----
@@ -116,7 +116,7 @@ export access_token=$( \
 
 [TIP]
 ====
-All OAuth 2.0/OpenID connect specific information for your Keycloak setup is available at: http://keycloak:8180/auth/realms/techlab/.well-known/openid-configuration.
+All OAuth 2.0/OpenID Connect specific information for your Keycloak setup is available at: http://keycloak:8180/auth/realms/techlab/.well-known/openid-configuration.
 ====
 
 [TIP]

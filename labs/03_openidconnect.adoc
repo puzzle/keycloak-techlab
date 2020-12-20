@@ -1,4 +1,4 @@
-= OpenId connect OIDC
+= OpenID Connect (OIDC)
 
 link:https://openid.net/specs/openid-connect-core-1_0.html[OpenID Connect] is a simple identity layer on top of the `OAuth 2.0` protocol/framework. With OIDC Clients are able to verify the identity of a _End-User_ based on the authentication performed by an Authorization Server. Additionally an authentication server may provide information about the basic profile of a _End-User_ in a REST-like manner. OIDC makes heavy use of the Json Web Token (JWT) set of standards to digitally sign and encrypt that data in a compact and web-friendly way.
 
@@ -42,15 +42,15 @@ OpenID Connect is an extension for OAuth 2.0 and implements authentication. Clie
 
 == Flow
 
-The OpenId Connect process flow is the same as the OAuth 2.0 authorization process flow with the following additions:
+The OpenID Connect process flow is the same as the OAuth 2.0 authorization process flow with the following additions:
 
 * In addition to the `access token`, an `ID token` is returned by the authorization server.
 * _Userinfo_ endpoint for getting more user information (if the `ID token` is not sufficient)
 * `openid` is passed as a parameter in the Scope during the initial call to the Authorization server.
 
-So if an Authorization server is also set up for OpenId Connect, you can in addition to exchanging the authorization code for an `access token`, also get an `ID token`, which can be used for user “authentication”.
+So if an Authorization server is also set up for OpenID Connect, you can in addition to exchanging the authorization code for an `access token`, also get an `ID token`, which can be used for user “authentication”.
 
-The id-token is the added piece in OpenID Connect, that allows the the OAuth 2.0 flow to be used for Federated Authentication.
+The id-token is the added piece in OpenID Connect, that allows the OAuth 2.0 flow to be used for Federated Authentication.
 
 == Use cases
 
@@ -66,13 +66,13 @@ ____
 
 == Lab
 
-Maybe you noticed that we already got in touch with OpenID connect in the labs for OAuth 2.0? The endpoints of Keycloak already contained a hint in the URL like `/auth/realms/techlab/protocol/openid-connect/token`.
+Maybe you noticed that we already got in touch with OpenID Connect in the labs for OAuth 2.0? The endpoints of Keycloak already contained a hint in the URL like `/auth/realms/techlab/protocol/openid-connect/token`.
 
-As you've read, Openid connect is an extension to OAuth 2.0. Keycloak implements OpenID connect and that's why the endpoints are already suitable for OpenID connect.
+As you've read, OpenID Connect is an extension to OAuth 2.0. Keycloak implements OpenID Connect and that's why the endpoints are already suitable for OpenID Connect.
 
-Take a look at the following figure which shows the communication for a OpenID connect use-case:
+Take a look at the following figure which shows the communication for a OpenID Connect use-case:
 
-[caption="OpenID connect",link=https://infosec.mozilla.org/guidelines/iam/openid_connect.html]
+[caption="OpenID Connect",link=https://infosec.mozilla.org/guidelines/iam/openid_connect.html]
 image::https://infosec.mozilla.org/guidelines/assets/images/OIDC_sequence_diagram.png[]
 
 So, to enable OIDC instead of pure OAuth 2.0 we basically just have to add the `SCOPE=openid` parameter to our initial authentication request.
@@ -91,7 +91,7 @@ A request could by e.g. contain the following scope parameter: `scope=openid pro
 Keycloak does support some more scopes, like by e.g. roles or mircoprofile support. They are documented link:https://www.keycloak.org/docs/latest/server_admin/index.html#protocol[here]. Some of them are enabled by default.
 ====
 
-We have already done OpenID connect requests in the lab for link:./02b_oauth2-implicit-code-flow.adoc[OAuth 2.0 implicit flow]. Try to get an ID token for the example we know from the link:./02d_oauth2-resource-owner-credentials-flow.adoc[OAuth 2.0 resource owner password credentials] lab:
+We have already done OpenID Connect requests in the lab for link:./02b_oauth2-implicit-code-flow.adoc[OAuth 2.0 implicit flow]. Try to get an ID token for the example we know from the link:./02d_oauth2-resource-owner-credentials-flow.adoc[OAuth 2.0 resource owner password credentials] lab:
 
 [code,sh]
 ----
@@ -118,7 +118,7 @@ Keycloak does not include claims for non existing data. Just add or delete a ema
 
 As already mentioned in a previous lab Keycloak offers (as specified link:https://openid.net/specs/openid-connect-discovery-1_0.html[here]) an `.well-known` endpoint at http://keycloak:8180/auth/realms/techlab/.well-known/openid-configuration.
 
-OpenID connect specifies a link:https://openid.net/specs/openid-connect-core-1_0.html#UserInfo[_Userinfo_ endpoint] to get claims about the authenticated End-User using a token. Try to implement a cURL request to the right endpoint using one of the tokens form the previous tasks.
+OpenID Connect specifies a link:https://openid.net/specs/openid-connect-core-1_0.html#UserInfo[_Userinfo_ endpoint] to get claims about the authenticated End-User using a token. Try to implement a cURL request to the right endpoint using one of the tokens form the previous tasks.
 
 ////
 export access_token=$(\

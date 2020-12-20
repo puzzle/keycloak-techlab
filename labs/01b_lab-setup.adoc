@@ -66,7 +66,7 @@ You will find the button `Add realm` on the top left by moving the mouse over Ma
 The default Realm is `master`. Keycloak uses this for basic functionality, so you should have *very good reasons when working with this realm*. It is safer to create a new realm even for testing purposes.
 ====
 
-Additionally, we want to enable traceability and auditing in our freshly created realm. In Keycloak thats simply called `Events`.
+Additionally, we want to enable traceability and auditing in our freshly created realm. In Keycloak that's simply called `Events`.
 
 [subs="+replacements,quotes"]
     Events -> Config -> Enable Save Events for Login Events and Admin Events -> Save

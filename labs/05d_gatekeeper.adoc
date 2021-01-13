@@ -4,12 +4,15 @@ In this lab we leave the world where we can change software arbitrarily. Sometim
 
 For this lab we use link:https://hub.docker.com/r/kennethreitz/httpbin/[httpbin] by Kenneth Reitz as standard application that we want to protect. httpbin is already integrated in the docker-compose setup of this techlab and available at http://localhost:8088/.
 
+ifndef::env-github[]
+[ditaa, "../images/gatekeeper-flow", svg]
 ----
 +---------------------+
 |                     |     Credentials
 | Resource Owner:Nerd |
 |                     +--------------------+
-+---------------------+                    v
++---------------------+                    |
+                                           v
                                          +-+--------------------+
                            +------------>+                      |
                            | AuthCode    | Auth Server:Keycloak |
@@ -29,6 +32,10 @@ For this lab we use link:https://hub.docker.com/r/kennethreitz/httpbin/[httpbin]
 |                              |
 +------------------------------+
 ----
+endif::env-github[]
+ifdef::env-github[]
+image::../images/gatekeeper-flow.svg[]
+endif::env-github[]
 
 Create a confidential client definition for gatekeeper in Keycloak with the name `lab-gatekeeper`.
 

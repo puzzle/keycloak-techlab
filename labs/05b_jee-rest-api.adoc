@@ -4,12 +4,14 @@ This Lab is based on `service-jee-jaxrs` of the link:https://github.com/keycloak
 
 In this lab we are going to create a restful _Resource Server_ and requesting it's resources using a javascript application as _Client_ (we will create this client with the next lab). The credentials of _Resource Owner_ `Nerd` will be used in combination with the _Authorization Code_ or _Implicit_ Flow to obtain a valid token.
 
+ifndef::env-github[]
+[ditaa, "../images/jee-jaxrs-flow", svg]
 ----
- +---------------------+       Credentials
- |                     |
- | Resource Owner:Nerd | +--------------------+
+ +---------------------+ 
+ |                     |      Credentials
+ | Resource Owner:Nerd +----------------------+
  |                     |                      |
- +---------------------+                      |
+ +---------------------+                      v
                                            +--+-------------------+
                              +------------>+                      |
                              | AuthCode    | Auth Server:Keycloak |
@@ -25,8 +27,11 @@ In this lab we are going to create a restful _Resource Server_ and requesting it
                              |             | Resource Server:lab-jee-rest-api |
                              +------------>+                                  |
                                            +----------------------------------+
-
 ----
+endif::env-github[]
+ifdef::env-github[]
+image::../images/jee-jaxrs-flow.svg[]
+endif::env-github[]
 
 We start by creating the client definitions. Create a new client named `lab-jee-rest-api`. You have learned the basics of what important settings an *API client* needs in the previous theoretical labs and we have already seen the special `bearer_only` type -- so try to reflect the learned and create the client without guidance.
 

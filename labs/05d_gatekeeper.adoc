@@ -1,11 +1,16 @@
-= Secure a "legacy" or "standard" applications using gatekeeper
+= Secure a "legacy" or "standard" applications using oauth2proxy
 
-In this lab we leave the world where we can change software arbitrarily. Sometimes you want to protect standard software with Keycloak that does not support OpenID connect or SAML. Fortunately, Keycloak offers us with link:https://www.keycloak.org/docs/latest/securing_apps/index.html#_keycloak_generic_adapter[Gatekeeper] a fairly new and lean proxy for that use case.
+[NOTE]
+====
+The Gatekeeper / Louketo Proxy previously used in this lab has been end of live since November 2020 and is no longer maintained. The open source link:https://github.com/oauth2-proxy/oauth2-proxy[oauth2-proxy] project is now used as an alternative.
+====
+
+In this lab we leave the world where we can change software arbitrarily. Sometimes you want to protect standard software with Keycloak that does not support OpenID connect or SAML. For this use case we use a link:https://github.com/oauth2-proxy/oauth2-proxy[oauth2-proxy] which mediates OAuth 2.0 / OIDC with Keycloak for the standard software.
 
 For this lab we use link:https://hub.docker.com/r/kennethreitz/httpbin/[httpbin] by Kenneth Reitz as standard application that we want to protect. httpbin is already integrated in the docker-compose setup of this techlab and available at http://localhost:8088/.
 
 ifndef::env-github[]
-[ditaa, "../images/gatekeeper-flow", svg]
+[ditaa, "../images/proxy-flow", svg]
 ----
 +---------------------+
 |                     |     Credentials
@@ -20,7 +25,7 @@ ifndef::env-github[]
                            v             +----------------------+
 +--------------------------+--+
 |                             |
-| Client(cURL):lab-gatekeeper |
+| Client(cURL):lab-proxy |
 |                             |
 +-------------+---------------+
               |
@@ -34,14 +39,14 @@ ifndef::env-github[]
 ----
 endif::env-github[]
 ifdef::env-github[]
-image::../images/gatekeeper-flow.svg[]
+image::../images/proxy-flow.svg[]
 endif::env-github[]
 
-Create a confidential client definition for gatekeeper in Keycloak with the name `lab-gatekeeper`.
+Create a confidential client definition for gatekeeper in Keycloak with the name `lab-proxy`.
 
 [TIP]
 ====
-Gatekeeper is kind of a backend-application, you may choose the default flow type.
+The proxy acts as kind of a backend-application, you may choose the default flow type.
 ====
 
 ////
@@ -53,29 +58,18 @@ Go to the docker-compose setup and adjust the client-secret to the newly generat
 
 [TIP]
 ====
-You might want to restart gatekeeper independently with:
+You might want to restart the proxy independently with:
 [source,sh]
 ----
-docker-compose up --build --detach gatekeeper
+docker-compose up --build --detach oauth2proxy
 ----
 ====
 
-Try to open http://localhost:3000/ip, which should return your current ip. It does not work? Take a look into the gatekeeper log.
+The proxy service is available at http://localhost:3000. It is already preconfigured for you.
 
-But don't lose too much time: It's a bug with Keycloak/Gatekeeper. Read link:https://www.keycloak.org/docs/latest/securing_apps/index.html#known-issues[this documentation] and try to fix it with a workaround. 
+Try to open http://localhost:3000/ip, which should return your current ip. 
 
-[TIP]
-====
-Gatekeeper expects the `cliend_id` as audience (`aud` claim) in the token. This is a bug. As workaround you can add a corresponding mapper: Clients -> `<your requesting client>` -> Mappers -> `Mapper Type: Audience` and as `Included Client Audience` again `<your requesting client>`.
-====
-
-The gatekeeper proxy service is available at http://localhost:3000. It is already preconfigured for you.
-
-////
-Client -> Mappers -> Create -> Mapper Type: Audience -> Included Client Audience: lab-gatekeeper
-////
-
-Does the request work now? 
+Does the request work? 
 
 Currently you just have to be authenticated to access the httpbin resources via the gatekeeper proxy. As a next step we would like to additionally authorize the call to `/ip` and `/anything` using separate client roles in Keycloak. Try to implement that.
 

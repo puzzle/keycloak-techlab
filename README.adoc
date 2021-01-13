@@ -1,7 +1,7 @@
 = Puzzle ITC - Keycloak Techlab Documentation
 
 [.lead]
-This _Techlab_ is based on Keycloak version 8.
+This _Techlab_ is based on Keycloak version 12.
 
 [IMPORTANT]
 ====
@@ -56,7 +56,7 @@ This Techlab contains exercises and solutions. The solutions are partially integ
 
 == Resources used in this Techlab
 
-* Local Keycloak Setup: https://github.com/puzzle/keycloak-techlab-setup
+* Local Keycloak setup: https://github.com/puzzle/keycloak-techlab-setup
 * Keycloak quickstarts: https://github.com/keycloak/keycloak-quickstarts
 * docker, docker-compose, cURL, maven
 

@@ -39,12 +39,6 @@ In the following labs we will communicate with Keycloak both from our local brow
 
 After starting, your local Keycloak _Administration Console_ should be exposed at http://keycloak:8180. Please check that the Administration Console is displayed correctly. You should see the same as by opening http://localhost:8180.
 
-[NOTE]
-====
-The Container `gatekeeper_1` will not start successfully during the initial startup and stops with the Error message `[error] failed to retrieve the provider configuration from discovery url - techlab-setup_gatekeeper_1 exited with code 1`. This is because it tries to access the Realm `techlab` which we will create later on in this Lab. You can ignore this error until we created the missing Realm.
-====
-
-
 == Overview of the Dockerized Lab Setup
 
 image::../images/TechlabEnvironment.svg[Dockerized Lab Setup Overview]

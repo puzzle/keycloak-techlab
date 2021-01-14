@@ -82,9 +82,9 @@ Failed? If you got an error like `_Source/Target option 5 is no longer supported
 
 [source,xml]
 ----
-<java.version>1.11</java.version>
-<maven.compiler.source>1.11</maven.compiler.source>
-<maven.compiler.target>1.11</maven.compiler.target>
+<java.version>11</java.version>
+<maven.compiler.source>11</maven.compiler.source>
+<maven.compiler.target>11</maven.compiler.target>
 ----
 ====
 
@@ -137,11 +137,11 @@ Create your Basic-Auth credentials with the following command:
 ====
 
 ////
-echo -n "techlab-cli-confidential:8188f1b5-b64a-4b4d-a404-938acf8d003f" | base64 -w0
+echo -n "techlab-cli-confidential:fd10218d-277e-4696-a7ba-712bd11d10a6" | base64 -w0
 
 export access_token=$(\
    curl -X POST http://keycloak:8180/auth/realms/techlab/protocol/openid-connect/token \
-   -H 'Authorization: Basic dGVjaGxhYi1jbGktY29uZmlkZW50aWFsOjgxODhmMWI1LWI2NGEtNGI0ZC1hNDA0LTkzOGFjZjhkMDAzZg==' \
+   -H 'Authorization: Basic dGVjaGxhYi1jbGktY29uZmlkZW50aWFsOmZkMTAyMThkLTI3N2UtNDY5Ni1hN2JhLTcxMmJkMTFkMTBhNg==' \
    -H 'content-type: application/x-www-form-urlencoded' \
    -d 'username=nerd&password=quirky&grant_type=password' | jq --raw-output '.access_token' \
 )

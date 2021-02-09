@@ -42,7 +42,7 @@ Know we will create our own application landscape that uses Keycloak to secure t
 * a link:./05a_spring-boot-rest-api.adoc[Spring Boot based restful API] to show some specialties of Spring Framework
 * a link:./05b_jee-rest-api.adoc[JEE based restful API] secured with Wildfly Keycloak Adapter
 * a link:./05c_javascript-app.adoc[browser application] implemented using html5 and based on keycloak.js
-* a simulated link:./05d_gatekeeper.adoc[standard application] using Gatekeeper to authenticate and authorize access
+* a simulated link:./05d_proxy.adoc[standard application] using Proxy to authenticate and authorize access
 
 
 '''
